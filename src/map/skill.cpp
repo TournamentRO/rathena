@@ -7712,7 +7712,6 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 				clif_skill_nodamage(src, bl, skill_id, skill_lv, i);
 				break;
 			}
-			clif_skill_fail(sd, skill_id, USESKILL_FAIL_LEVEL, 0);
 		}
 		//Attempts to strip at rate i and duration d
 		if( (i = skill_strip_equip(src,bl, location, i, skill_lv, d)) || (skill_id != ST_FULLSTRIP && skill_id != GC_WEAPONCRUSH ) )
