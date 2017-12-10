@@ -3304,7 +3304,8 @@ static struct Damage battle_calc_multi_attack(struct Damage wd, struct block_lis
 
 	if( sd && !skill_id ) {	// if no skill_id passed, check for double attack [helvetica]
 		short i;
-		if( ( ( skill_lv = pc_checkskill(sd,TF_DOUBLE) ) > 0 && sd->weapontype1 == W_DAGGER )
+		//if( ( ( skill_lv = pc_checkskill(sd,TF_DOUBLE) ) > 0 && sd->weapontype1 == W_DAGGER )
+		if (((skill_lv = pc_checkskill(sd, TF_DOUBLE)) > 0 && sd->weapontype1 == W_DAGGER && !is_attack_critical(wd, src, target, skill_id, skill_lv, true))
 			|| ( sd->bonus.double_rate > 0 && sd->weapontype1 != W_FIST ) //Will fail bare-handed
 			|| ( sc && sc->data[SC_KAGEMUSYA] && sd->weapontype1 != W_FIST )) // Need confirmation
 		{	//Success chance is not added, the higher one is used [Skotlex]
@@ -3427,8 +3428,11 @@ static int battle_calc_attack_skill_ratio(struct Damage wd, struct block_list *s
 			break;
 		case AC_DOUBLE:
 		case MA_DOUBLE:
-			skillratio += 10 * (skill_lv - 1);
-			break;
+			if (sc && sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_ROGUE) {
+				// ATK_ADDRATE(wd.damage, wd.damage2, 20);
+				skillratio *= 2;
+			}
+				break;
 		case AC_SHOWER:
 		case MA_SHOWER:
 #ifdef RENEWAL
@@ -5077,6 +5081,7 @@ struct Damage battle_calc_weapon_final_atk_modifiers(struct Damage wd, struct bl
 
 	if( sc ) {
 		//SC_FUSION hp penalty [Komurka]
+		/* DISABLE SG HP PENALTY CUSTOM
 		if (sc->data[SC_FUSION]) {
 			int hp= sstatus->max_hp;
 			if (sd && tsd) {
@@ -5087,6 +5092,7 @@ struct Damage battle_calc_weapon_final_atk_modifiers(struct Damage wd, struct bl
 				hp = 2*hp/100; //2% hp loss per hit
 			status_zap(src, hp, 0);
 		}
+		*/
 		// Only affecting non-skills
 		if (!skill_id && wd.dmg_lv > ATK_BLOCK) {
 			if (sc->data[SC_ENCHANTBLADE]) {
@@ -6844,6 +6850,10 @@ int64 battle_calc_return_damage(struct block_list* bl, struct block_list *src, i
 				if( sc->data[SC_SHIELDSPELL_DEF] && sc->data[SC_SHIELDSPELL_DEF]->val1 == 2 && !status_bl_has_mode(src,MD_STATUS_IMMUNE) ){
 						rdamage += damage * sc->data[SC_SHIELDSPELL_DEF]->val2 / 100;
 						if (rdamage < 1) rdamage = 1;
+				}
+				//GIVE PRIESTS 10% REFLECT WHEN LINKED
+				if (sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_PRIEST) {
+					rdamage += damage * 10 / 100;
 				}
 			}
 		}

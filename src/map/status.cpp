@@ -4075,7 +4075,13 @@ int status_calc_pc_(struct map_session_data* sd, enum e_status_calc_opt opt)
 		sd->subrace[RC_DEMON] += skill;
 		sd->subele[ELE_DARK] += skill;
 	}
-
+	//Increase damage vs Boss and Holy Monsters for Star Gladiator
+	if (sc && sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_STAR) {
+		sd->right_weapon.addrace[CLASS_BOSS] += 50;
+		sd->left_weapon.addrace[CLASS_BOSS] += 50;
+		sd->right_weapon.addele[ELE_HOLY] += 50;
+		sd->left_weapon.addele[ELE_HOLY] += 50;
+	}
 	if(sc->count) {
 		if(sc->data[SC_CONCENTRATE]) { // Update the card-bonus data
 			sc->data[SC_CONCENTRATE]->val3 = sd->param_bonus[1]; // Agi
@@ -5553,6 +5559,9 @@ static unsigned short status_calc_vit(struct block_list *bl, struct status_chang
 		vit -= sc->data[SC_STOMACHACHE]->val1;
 	if(sc->data[SC_KYOUGAKU])
 		vit -= sc->data[SC_KYOUGAKU]->val2;
+	//GIVE SAGE ADDITIONAL VIT BASED ON INT WHEN LINKED
+	if (sc->data[SC_SPIRIT] && (sc->data[SC_SPIRIT]->val2 == SL_WIZARD || sc->data[SC_SPIRIT]->val2 == SL_SAGE))
+		vit += ((TBL_PC*)bl)->status.int_ / 5;
 	if(sc->data[SC_SWORDCLAN])
 		vit += 1;
 	if(sc->data[SC_JUMPINGCLAN])
@@ -6751,8 +6760,9 @@ static unsigned short status_calc_speed(struct block_list *bl, struct status_cha
 		speed = speed * speed_rate / 100;
 	if( sc->data[SC_STEELBODY] )
 		speed = 200;
-	if( sc->data[SC_DEFENDER] )
-		speed = max(speed, 200);
+	//DISABLE DEFENDER SPEED PENALTY
+	//if( sc->data[SC_DEFENDER] )
+	//	speed = max(speed, 200);
 	if( sc->data[SC_WALKSPEED] && sc->data[SC_WALKSPEED]->val1 > 0 ) // ChangeSpeed
 		speed = speed * 100 / sc->data[SC_WALKSPEED]->val1;
 
@@ -8650,6 +8660,18 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 		}
 		if (tick == 1) return 1; // Minimal duration: Only strip without causing the SC
 	break;
+	case SC_CP_ARMOR:
+		status_change_end(bl, SC_STRIPARMOR, INVALID_TIMER);
+		break;
+	case SC_CP_WEAPON:
+		status_change_end(bl, SC_STRIPWEAPON, INVALID_TIMER);
+		break;
+	case SC_CP_SHIELD:
+		status_change_end(bl, SC_STRIPSHIELD, INVALID_TIMER);
+		break;
+	case SC_CP_HELM:
+		status_change_end(bl, SC_STRIPHELM, INVALID_TIMER);
+		break;
 	case SC_MERC_FLEEUP:
 	case SC_MERC_ATKUP:
 	case SC_MERC_HPUP:
@@ -8879,8 +8901,9 @@ int status_change_start(struct block_list* src, struct block_list* bl,enum sc_ty
 			status_change_end(bl, SC_DECREASEAGI, INVALID_TIMER);
 			status_change_end(bl, SC_ADORAMUS, INVALID_TIMER);
 		}
-		status_change_end(bl, SC_CARTBOOST, INVALID_TIMER);
-		status_change_end(bl, SC_GN_CARTBOOST, INVALID_TIMER);
+		//DECREASE AGI DOESNT CANCEL THESE BUFFS
+		//status_change_end(bl, SC_CARTBOOST, INVALID_TIMER);
+		//status_change_end(bl, SC_GN_CARTBOOST, INVALID_TIMER);
 		// Also blocks the ones below...
 	case SC_DONTFORGETME:
 		status_change_end(bl, SC_INCREASEAGI, INVALID_TIMER);

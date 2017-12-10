@@ -1647,18 +1647,18 @@ void pc_calc_skilltree(struct map_session_data *sd)
 	nullpo_retv(sd);
 	i = pc_calc_skilltree_normalize_job(sd);
 	c = pc_mapid2jobid(i, sd->status.sex);
-	if( c == -1 )
+	if (c == -1)
 	{ //Unable to normalize job??
 		ShowError("pc_calc_skilltree: Unable to normalize job %d for character %s (%d:%d)\n", i, sd->status.name, sd->status.account_id, sd->status.char_id);
 		return;
 	}
 	c = pc_class2idx(c);
 
-	for( i = 0; i < MAX_SKILL; i++ ) {
-		if( sd->status.skill[i].flag != SKILL_FLAG_PLAGIARIZED && sd->status.skill[i].flag != SKILL_FLAG_PERM_GRANTED ) //Don't touch these
+	for (i = 0; i < MAX_SKILL; i++) {
+		if (sd->status.skill[i].flag != SKILL_FLAG_PLAGIARIZED && sd->status.skill[i].flag != SKILL_FLAG_PERM_GRANTED) //Don't touch these
 			sd->status.skill[i].id = 0; //First clear skills.
 		/* permanent skills that must be re-checked */
-		if( sd->status.skill[i].flag == SKILL_FLAG_PERM_GRANTED ) {
+		if (sd->status.skill[i].flag == SKILL_FLAG_PERM_GRANTED) {
 			uint16 sk_id = skill_idx2id(i);
 			if (!sk_id) {
 				sd->status.skill[i].id = 0;
@@ -1667,47 +1667,74 @@ void pc_calc_skilltree(struct map_session_data *sd)
 				continue;
 			}
 			switch (sk_id) {
-				case NV_TRICKDEAD:
-					if( (sd->class_&MAPID_UPPERMASK) != MAPID_NOVICE ) {
-						sd->status.skill[i].id = 0;
-						sd->status.skill[i].lv = 0;
-						sd->status.skill[i].flag = SKILL_FLAG_PERMANENT;
-					}
-					break;
+			case NV_TRICKDEAD:
+				if ((sd->class_&MAPID_UPPERMASK) != MAPID_NOVICE) {
+					sd->status.skill[i].id = 0;
+					sd->status.skill[i].lv = 0;
+					sd->status.skill[i].flag = SKILL_FLAG_PERMANENT;
+				}
+				break;
 			}
 		}
 	}
 
-	for( i = 0; i < MAX_SKILL; i++ ) {
+	for (i = 0; i < MAX_SKILL; i++) {
 		uint16 skill_id = 0;
 
 		// Restore original level of skills after deleting earned skills.
-		if( sd->status.skill[i].flag != SKILL_FLAG_PERMANENT && sd->status.skill[i].flag != SKILL_FLAG_PERM_GRANTED && sd->status.skill[i].flag != SKILL_FLAG_PLAGIARIZED ) {
+		if (sd->status.skill[i].flag != SKILL_FLAG_PERMANENT && sd->status.skill[i].flag != SKILL_FLAG_PERM_GRANTED && sd->status.skill[i].flag != SKILL_FLAG_PLAGIARIZED) {
 			sd->status.skill[i].lv = (sd->status.skill[i].flag == SKILL_FLAG_TEMPORARY) ? 0 : sd->status.skill[i].flag - SKILL_FLAG_REPLACED_LV_0;
 			sd->status.skill[i].flag = SKILL_FLAG_PERMANENT;
 		}
 
 		//Enable Bard/Dancer spirit linked skills.
-		if (!(skill_id = skill_idx2id(i)) || skill_id < DC_HUMMING || skill_id > DC_SERVICEFORYOU)
+		//if (!(skill_id = skill_idx2id(i)) || skill_id < DC_HUMMING || skill_id > DC_SERVICEFORYOU )
+		if (!(skill_id = skill_idx2id(i)) || skill_id < WZ_VERMILION || skill_id > LK_PARRYING)
 			continue;
+		//GIVE BLACKSMITH PARRY SKILL WHEN LINKED
+		if (&sd->sc && sd->sc.count && sd->sc.data[SC_SPIRIT] && sd->sc.data[SC_SPIRIT]->val2 == SL_BLACKSMITH
+			&& (!(skill_id != LK_PARRYING))) {
 
-		if( &sd->sc && sd->sc.count && sd->sc.data[SC_SPIRIT] && sd->sc.data[SC_SPIRIT]->val2 == SL_BARDDANCER ) {
+			sd->status.skill[i].id = skill_id;
+			sd->status.skill[i].lv = 10; // Set the skill to level 10
+			sd->status.skill[i].flag = SKILL_FLAG_TEMPORARY; // Tag it as a non-savable, non-uppable, bonus skill
+		}
+		//GIVE STARGLAD PARRY SKILL WHEN LINKED
+		if (&sd->sc && sd->sc.count && sd->sc.data[SC_SPIRIT] && sd->sc.data[SC_SPIRIT]->val2 == SL_STAR
+			&& (!(skill_id != LK_PARRYING))) {
+
+			sd->status.skill[i].id = skill_id;
+			sd->status.skill[i].lv = 10; // Set the skill to level 10
+			sd->status.skill[i].flag = SKILL_FLAG_TEMPORARY; // Tag it as a non-savable, non-uppable, bonus skill
+		}
+
+
+		if (&sd->sc && sd->sc.count && sd->sc.data[SC_SPIRIT] && sd->sc.data[SC_SPIRIT]->val2 == SL_BARDDANCER
+			&& (!(skill_id < DC_HUMMING || skill_id > DC_SERVICEFORYOU))) {
 			//Link Dancer skills to bard.
-			if( sd->status.sex ) {
-				if( sd->status.skill[i-8].lv < 10 )
+			if (sd->status.sex) {
+				if (sd->status.skill[i - 8].lv < 10)
 					continue;
 				sd->status.skill[i].id = skill_id;
-				sd->status.skill[i].lv = sd->status.skill[i-8].lv; // Set the level to the same as the linking skill
+				sd->status.skill[i].lv = sd->status.skill[i - 8].lv; // Set the level to the same as the linking skill
 				sd->status.skill[i].flag = SKILL_FLAG_TEMPORARY; // Tag it as a non-savable, non-uppable, bonus skill
 			}
 			//Link Bard skills to dancer.
 			else {
-				if( sd->status.skill[i].lv < 10 )
+				if (sd->status.skill[i].lv < 10)
 					continue;
-				sd->status.skill[i-8].id = skill_id - 8;
-				sd->status.skill[i-8].lv = sd->status.skill[i].lv; // Set the level to the same as the linking skill
-				sd->status.skill[i-8].flag = SKILL_FLAG_TEMPORARY; // Tag it as a non-savable, non-uppable, bonus skill
+				sd->status.skill[i - 8].id = skill_id - 8;
+				sd->status.skill[i - 8].lv = sd->status.skill[i].lv; // Set the level to the same as the linking skill
+				sd->status.skill[i - 8].flag = SKILL_FLAG_TEMPORARY; // Tag it as a non-savable, non-uppable, bonus skill
 			}
+		}
+		//GIVE STARGLAD PARRY SKILL WHEN LINKED
+		if (&sd->sc && sd->sc.count && sd->sc.data[SC_SPIRIT] && sd->sc.data[SC_SPIRIT]->val2 == SL_STAR
+			&& (!(skill_id != WZ_VERMILION))) {
+
+			sd->status.skill[i].id = skill_id;
+			sd->status.skill[i].lv = 10; // Set the skill to level 10
+			sd->status.skill[i].flag = SKILL_FLAG_TEMPORARY; // Tag it as a non-savable, non-uppable, bonus skill
 		}
 	}
 

@@ -11,7 +11,7 @@
 #include "../custom/defines_pre.h"
 
 /// Max number of items on @autolootid list
-#define AUTOLOOTITEM_SIZE 10
+#define AUTOLOOTITEM_SIZE 100
 
 /// The maximum number of atcommand and @warp suggestions
 #define MAX_SUGGESTIONS 10
@@ -50,7 +50,7 @@
 /// Uncomment to enable skills damage adjustments
 /// By enabling this, db/skill_damage.txt and the skill_damage mapflag will adjust the
 /// damage rate of specified skills.
-//#define ADJUST_SKILL_DAMAGE
+#define ADJUST_SKILL_DAMAGE
 
 /// Uncomment to enable the job base HP/SP table (job_basehpsp_db.txt)
 #define HP_SP_TABLES

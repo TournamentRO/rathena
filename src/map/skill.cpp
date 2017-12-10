@@ -2121,9 +2121,9 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 				!battle_check_range(bl, tbl, skill_get_range2(src, skill, autospl_skill_lv, true)))
 				continue;
 
-			if (skill == AS_SONICBLOW)
-				pc_stop_attack(sd); //Special case, Sonic Blow autospell should stop the player attacking.
-			else if (skill == PF_SPIDERWEB) //Special case, due to its nature of coding.
+//			if (skill == AS_SONICBLOW)
+//				pc_stop_attack(sd); //Special case, Sonic Blow autospell should stop the player attacking.
+			if (skill == PF_SPIDERWEB) //Special case, due to its nature of coding.
 				type = CAST_GROUND;
 
 			sd->state.autocast = 1;
@@ -7623,25 +7623,28 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 		int d = 0;
 
 		//Rate in percent
-		if ( skill_id == ST_FULLSTRIP ) {
-			i = 5 + 2*skill_lv + (sstatus->dex - tstatus->dex)/5;
-		} else if( skill_id == SC_STRIPACCESSARY ) {
-			i = 12 + 2 * skill_lv + (sstatus->dex - tstatus->dex)/5;
-		} else {
-			i = 5 + 5*skill_lv + (sstatus->dex - tstatus->dex)/5;
+		if (skill_id == ST_FULLSTRIP) {
+			i = 5 + 2 * skill_lv + (sstatus->dex - tstatus->dex) / 5;
+		}
+		else if (skill_id == SC_STRIPACCESSARY) {
+			i = 12 + 2 * skill_lv + (sstatus->dex - tstatus->dex) / 5;
+		}
+		else {
+			i = 5 + 5 * skill_lv + (sstatus->dex - tstatus->dex) / 5;
 		}
 
 		if (i < 5) i = 5; //Minimum rate 5%
 
 		//Duration in ms
-		if( skill_id == GC_WEAPONCRUSH){
-			d = skill_get_time(skill_id,skill_lv);
-			if(bl->type == BL_PC)
+		if (skill_id == GC_WEAPONCRUSH) {
+			d = skill_get_time(skill_id, skill_lv);
+			if (bl->type == BL_PC)
 				d += skill_lv * 15 + (sstatus->dex - tstatus->dex);
 			else
 				d += skill_lv * 30 + (sstatus->dex - tstatus->dex) / 2;
-		}else
-			d = skill_get_time(skill_id,skill_lv) + (sstatus->dex - tstatus->dex)*500;
+		}
+		else
+			d = skill_get_time(skill_id, skill_lv) + (sstatus->dex - tstatus->dex) * 500;
 
 		if (d < 0) d = 0; //Minimum duration 0ms
 
@@ -7660,7 +7663,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 			location = EQP_HELM;
 			break;
 		case ST_FULLSTRIP:
-			location = EQP_WEAPON|EQP_SHIELD|EQP_ARMOR|EQP_HELM;
+			location = EQP_WEAPON | EQP_SHIELD | EQP_ARMOR | EQP_HELM;
 			break;
 		case SC_STRIPACCESSARY:
 			location = EQP_ACC;
@@ -7668,12 +7671,43 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 		}
 
 		//Special message when trying to use strip on FCP [Jobbie]
-		if( sd && skill_id == ST_FULLSTRIP && tsc && tsc->data[SC_CP_WEAPON] && tsc->data[SC_CP_HELM] && tsc->data[SC_CP_ARMOR] && tsc->data[SC_CP_SHIELD])
+		if (sd && skill_id == ST_FULLSTRIP && tsc && tsc->data[SC_CP_WEAPON] && tsc->data[SC_CP_HELM] && tsc->data[SC_CP_ARMOR] && tsc->data[SC_CP_SHIELD])
 		{
 			clif_gospel_info(sd, 0x28);
 			break;
 		}
-
+		//BYPASS FCP WITH SINGLE STRIP WHEN ROGUE/STALKER IS LINKED
+		if (sd && tsc && sd->sc.data[SC_SPIRIT] && sd->sc.data[SC_SPIRIT]->val2 == SL_ROGUE && rand() % 100 < 5
+			&& (skill_id == RG_STRIPWEAPON && tsc->data[SC_CP_WEAPON] ||
+				skill_id == RG_STRIPSHIELD && tsc->data[SC_CP_SHIELD] ||
+				skill_id == RG_STRIPHELM && tsc->data[SC_CP_HELM] ||
+				skill_id == RG_STRIPARMOR && tsc->data[SC_CP_ARMOR])
+			) {
+			int ii = pc_search_inventory(sd, ITEMID_COATING_BOTTLE);
+			if (ii < MAX_INVENTORY) {
+				switch (skill_id) {
+				case RG_STRIPWEAPON:
+					status_change_end(bl, SC_CP_WEAPON, INVALID_TIMER);
+					sc_start(src, bl, SC_STRIPWEAPON, 20, skill_lv, skill_get_time(skill_id, skill_lv));
+					break;
+				case RG_STRIPSHIELD:
+					status_change_end(bl, SC_CP_SHIELD, INVALID_TIMER);
+					sc_start(src, bl, SC_STRIPSHIELD, 20, skill_lv, skill_get_time(skill_id, skill_lv));
+					break;
+				case RG_STRIPHELM:
+					status_change_end(bl, SC_CP_HELM, INVALID_TIMER);
+					sc_start(src, bl, SC_STRIPARMOR, 20, skill_lv, skill_get_time(skill_id, skill_lv));
+					break;
+				case RG_STRIPARMOR:
+					status_change_end(bl, SC_CP_ARMOR, INVALID_TIMER);
+					sc_start(src, bl, SC_STRIPHELM, 20, skill_lv, skill_get_time(skill_id, skill_lv));
+					break;
+				}
+				pc_delitem(sd, ii, 1, 0, 0, LOG_TYPE_CONSUME);
+				clif_skill_nodamage(src, bl, skill_id, skill_lv, i);
+				break;
+			}
+		}
 		//Attempts to strip at rate i and duration d
 		if( (i = skill_strip_equip(src,bl, location, i, skill_lv, d)) || (skill_id != ST_FULLSTRIP && skill_id != GC_WEAPONCRUSH ) )
 			clif_skill_nodamage(src,bl,skill_id,skill_lv,i);
@@ -7810,9 +7844,10 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 	case AM_CP_ARMOR:
 	case AM_CP_HELM:
 		{
-			unsigned int equip[] = {EQP_WEAPON, EQP_SHIELD, EQP_ARMOR, EQP_HEAD_TOP};
+			/*unsigned int equip[] = {EQP_WEAPON, EQP_SHIELD, EQP_ARMOR, EQP_HEAD_TOP};*/
 
-			if( sd && ( bl->type != BL_PC || ( dstsd && pc_checkequip(dstsd,equip[skill_id - AM_CP_WEAPON]) < 0 ) ) ){
+			//REMOVED FCP SKILL FAIL WHEN ITEM IS NOT EQUIPPED
+			if( sd && ( bl->type != BL_PC /*|| ( dstsd && pc_checkequip(dstsd,equip[skill_id - AM_CP_WEAPON]) < 0 )*/ ) ){
 				clif_skill_fail(sd,skill_id,USESKILL_FAIL_LEVEL,0);
 				map_freeblock_unlock(); // Don't consume item requirements
 				return 0;
@@ -15692,7 +15727,12 @@ bool skill_check_condition_castbegin(struct map_session_data* sd, uint16 skill_i
 		return false;
 	}
 
-	if( require.weapon && !pc_check_weapontype(sd,require.weapon) ) {
+	if (require.weapon && !(pc_check_weapontype(sd, require.weapon)
+		|| (skill_id == LK_PARRYING && sc && sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_BLACKSMITH && sd->status.weapon == W_1HAXE)
+		|| (skill_id == LK_PARRYING && sc && sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_KNIGHT && sd->status.weapon == W_1HSWORD)
+		|| (skill_id == LK_PARRYING && sc && sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_STAR && sd->status.weapon == W_BOOK)
+		))
+	{
 		switch(skill_id) {
 			case RA_AIMEDBOLT:
 				break;
@@ -15747,6 +15787,7 @@ bool skill_check_condition_castend(struct map_session_data* sd, uint16 skill_id,
 {
 	struct skill_condition require;
 	struct status_data *status;
+	struct status_change *sc = &sd->sc;
 	int i;
 	short index[MAX_SKILL_ITEM_REQUIRE];
 
@@ -15854,7 +15895,12 @@ bool skill_check_condition_castend(struct map_session_data* sd, uint16 skill_id,
 		return false;
 	}
 
-	if( require.weapon && !pc_check_weapontype(sd,require.weapon) ) {
+	if( require.weapon && !(pc_check_weapontype(sd,require.weapon) 
+		|| (skill_id == LK_PARRYING && sc && sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_BLACKSMITH && sd->status.weapon == W_1HAXE)
+		|| (skill_id == LK_PARRYING && sc && sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_KNIGHT && sd->status.weapon == W_1HSWORD)
+		|| (skill_id == LK_PARRYING && sc && sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_STAR && sd->status.weapon == W_BOOK)
+		))
+	{
 		clif_skill_fail(sd,skill_id,USESKILL_FAIL_THIS_WEAPON,0);
 		return false;
 	}
