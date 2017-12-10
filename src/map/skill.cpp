@@ -7677,7 +7677,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 			break;
 		}
 		//BYPASS FCP WITH SINGLE STRIP WHEN ROGUE/STALKER IS LINKED
-		if (sd && tsc && sd->sc.data[SC_SPIRIT] && sd->sc.data[SC_SPIRIT]->val2 == SL_ROGUE && rand() % 100 < 5
+		if (sd && tsc && sd->sc.data[SC_SPIRIT] && sd->sc.data[SC_SPIRIT]->val2 == SL_ROGUE
 			&& (skill_id == RG_STRIPWEAPON && tsc->data[SC_CP_WEAPON] ||
 				skill_id == RG_STRIPSHIELD && tsc->data[SC_CP_SHIELD] ||
 				skill_id == RG_STRIPHELM && tsc->data[SC_CP_HELM] ||
