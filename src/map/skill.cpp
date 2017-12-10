@@ -7676,37 +7676,43 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 			clif_gospel_info(sd, 0x28);
 			break;
 		}
-		//BYPASS FCP WITH SINGLE STRIP WHEN ROGUE/STALKER IS LINKED
+		//BYPASS FCP WITH SINGLE STRIP WHEN ROGUE/STALKER IS LINKED CONSUMING GLISTENING COAT AT 5% RATE
 		if (sd && tsc && sd->sc.data[SC_SPIRIT] && sd->sc.data[SC_SPIRIT]->val2 == SL_ROGUE
-			&& (skill_id == RG_STRIPWEAPON && tsc->data[SC_CP_WEAPON] ||
+			&&
+			(skill_id == RG_STRIPWEAPON && tsc->data[SC_CP_WEAPON] ||
 				skill_id == RG_STRIPSHIELD && tsc->data[SC_CP_SHIELD] ||
 				skill_id == RG_STRIPHELM && tsc->data[SC_CP_HELM] ||
 				skill_id == RG_STRIPARMOR && tsc->data[SC_CP_ARMOR])
 			) {
+			//int ii = pc_search_inventory(sd, ITEMID_COATING_BOTTLE);
+			//if (ii < MAX_INVENTORY) {
 			int ii = pc_search_inventory(sd, ITEMID_COATING_BOTTLE);
-			if (ii < MAX_INVENTORY) {
+			if (ii < MAX_INVENTORY && rnd() % 100 < 10 && !pc_delitem(sd, ii, 1, 0, 0, LOG_TYPE_CONSUME))
+			{
 				switch (skill_id) {
 				case RG_STRIPWEAPON:
 					status_change_end(bl, SC_CP_WEAPON, INVALID_TIMER);
-					sc_start(src, bl, SC_STRIPWEAPON, 20, skill_lv, skill_get_time(skill_id, skill_lv));
+					//sc_start(src, bl, SC_STRIPWEAPON, 100, skill_lv, skill_get_time(skill_id, skill_lv));
+					sc_start(src, bl, SC_STRIPWEAPON, 100, skill_lv, 30000);
 					break;
 				case RG_STRIPSHIELD:
 					status_change_end(bl, SC_CP_SHIELD, INVALID_TIMER);
-					sc_start(src, bl, SC_STRIPSHIELD, 20, skill_lv, skill_get_time(skill_id, skill_lv));
+					sc_start(src, bl, SC_STRIPSHIELD, 100, skill_lv, 30000);
 					break;
 				case RG_STRIPHELM:
 					status_change_end(bl, SC_CP_HELM, INVALID_TIMER);
-					sc_start(src, bl, SC_STRIPARMOR, 20, skill_lv, skill_get_time(skill_id, skill_lv));
+					sc_start(src, bl, SC_STRIPARMOR, 100, skill_lv, 30000);
 					break;
 				case RG_STRIPARMOR:
 					status_change_end(bl, SC_CP_ARMOR, INVALID_TIMER);
-					sc_start(src, bl, SC_STRIPHELM, 20, skill_lv, skill_get_time(skill_id, skill_lv));
+					sc_start(src, bl, SC_STRIPHELM, 100, skill_lv, 30000);
 					break;
 				}
 				pc_delitem(sd, ii, 1, 0, 0, LOG_TYPE_CONSUME);
 				clif_skill_nodamage(src, bl, skill_id, skill_lv, i);
 				break;
 			}
+			clif_skill_fail(sd, skill_id, USESKILL_FAIL_LEVEL, 0);
 		}
 		//Attempts to strip at rate i and duration d
 		if( (i = skill_strip_equip(src,bl, location, i, skill_lv, d)) || (skill_id != ST_FULLSTRIP && skill_id != GC_WEAPONCRUSH ) )
