@@ -1146,7 +1146,8 @@ int64 battle_calc_damage(struct block_list *src,struct block_list *bl,struct Dam
 		}
 
 		// attack blocked by Parrying
-		if( (sce = sc->data[SC_PARRYING]) && flag&BF_WEAPON && skill_id != WS_CARTTERMINATION && rnd()%100 < sce->val2 ) {
+		//if( (sce = sc->data[SC_PARRYING]) && flag&BF_WEAPON && skill_id != WS_CARTTERMINATION && rnd()%100 < sce->val2 ) {
+		if ((sce = sc->data[SC_PARRYING]) && flag&BF_WEAPON && rnd() % 100 < sce->val2) {
 			clif_skill_nodamage(bl, bl, LK_PARRYING, sce->val1,1);
 			return 0;
 		}
@@ -6823,7 +6824,7 @@ int64 battle_calc_return_damage(struct block_list* bl, struct block_list *src, i
 						status_change_end(bl,SC_REFLECTDAMAGE,INVALID_TIMER);
 				}
 			} else {
-				if ( sc->data[SC_REFLECTSHIELD] && skill_id != WS_CARTTERMINATION ) {
+				if (sc->data[SC_REFLECTSHIELD] && skill_id != WS_CARTTERMINATION && skill_id != GS_DESPERADO) {
 					// Don't reflect non-skill attack if has SC_REFLECTSHIELD from Devotion bonus inheritance
 					if (!skill_id && battle_config.devotion_rdamage_skill_only && sc->data[SC_REFLECTSHIELD]->val4)
 						rdamage = 0;

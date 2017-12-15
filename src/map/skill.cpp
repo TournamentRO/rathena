@@ -1174,6 +1174,13 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 						rate=(sd->status.job_level+9)/10;
 						skill_castend_damage_id(src,bl,HT_BLITZBEAT,(skill<rate)?skill:rate,tick,SD_LEVEL);
 					}
+					// Automatic trigger of Falcon Assault when Soul Linked
+					if (pc_isfalcon(sd) && (skill = pc_checkskill(sd, SN_FALCONASSAULT))>0 &&
+						(sc && sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_HUNTER) &&
+						rnd() % 100 <= 15) {
+						rate = 15;
+						skill_castend_damage_id(src, bl, SN_FALCONASSAULT, (skill<rate) ? skill : rate, tick, SD_LEVEL);
+					}
 					// Automatic trigger of Warg Strike [Jobbie]
 					if( pc_iswug(sd) && (skill = pc_checkskill(sd,RA_WUGSTRIKE)) > 0 && rnd()%1000 <= sstatus->luk*10/3+1 )
 						skill_castend_damage_id(src,bl,RA_WUGSTRIKE,skill,tick,0);
@@ -5049,6 +5056,10 @@ int skill_castend_damage_id (struct block_list* src, struct block_list *bl, uint
 		}
 		break;
 
+	case GS_DESPERADO:
+		skill_attack(skill_get_type(skill_id), src, src, bl, skill_id, skill_lv, tick, flag | SD_ANIMATION);
+		break;
+
 	case KN_BRANDISHSPEAR:
 	case ML_BRANDISH:
 		//Coded apart for it needs the flag passed to the damage calculation.
@@ -6593,7 +6604,12 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 		else if( bl->type == BL_MER )
 			skill_blockmerc_start((TBL_MER*)bl, skill_id, skill_get_time(skill_id, skill_lv));
 		break;
-
+	case GS_DESPERADO:
+		skill_area_temp[1] = 0;
+		map_foreachinshootrange(skill_area_sub, src, skill_get_splash(skill_id, skill_lv), BL_SKILL | BL_CHAR,
+			src, skill_id, skill_lv, tick, flag | BCT_ENEMY | 1, skill_castend_damage_id);
+		clif_skill_nodamage(src, src, skill_id, skill_lv, 1);
+		break;
 	case TK_JUMPKICK:
 		/* Check if the target is an enemy; if not, skill should fail so the character doesn't unit_movepos (exploitable) */
 		if( battle_check_target(src, bl, BCT_ENEMY) > 0 ) {
@@ -8042,7 +8058,7 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 
 			//Fails on noteleport maps, except for GvG and BG maps [Skotlex]
 			if( map[src->m].flag.noteleport &&
-				!(map[src->m].flag.battleground || map_flag_gvg2(src->m) )
+				(map[src->m].flag.battleground || map_flag_gvg2(src->m) )
 			) {
 				x = src->x;
 				y = src->y;
@@ -11335,11 +11351,11 @@ int skill_castend_id(int tid, unsigned int tick, int id, intptr_t data)
 		{
 			switch( ud->skill_id )
 			{
-			case GS_DESPERADO:
+			//case GS_DESPERADO:
 			case RL_FIREDANCE:
 				sd->canequip_tick = tick + skill_get_time(ud->skill_id, ud->skill_lv);
 				break;
-			case CR_GRANDCROSS:
+			//case CR_GRANDCROSS:
 			case NPC_GRANDDARKNESS:
 				if( (sc = status_get_sc(src)) && sc->data[SC_STRIPSHIELD] )
 				{
@@ -11761,7 +11777,7 @@ int skill_castend_pos2(struct block_list* src, int x, int y, uint16 skill_id, ui
 	case DC_FORTUNEKISS:
 	case DC_SERVICEFORYOU:
 	case CG_MOONLIT:
-	case GS_DESPERADO:
+	//case GS_DESPERADO:
 	case NJ_KAENSIN:
 	case NJ_BAKUENRYU:
 	case NJ_SUITON:
@@ -13140,7 +13156,7 @@ struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_
 					|| (map_find_skill_unit_oncell(src, ux, uy, SA_DELUGE, NULL, 1)) != NULL || (map_find_skill_unit_oncell(src, ux, uy, NJ_SUITON, NULL, 1)) != NULL)
 					break; //Turn water, deluge or suiton into waterball cell
 				continue;
-			case GS_DESPERADO:
+			/*case GS_DESPERADO:
 				unit_val1 = abs(layout->dx[i]);
 				unit_val2 = abs(layout->dy[i]);
 				if (unit_val1 < 2 || unit_val2 < 2) { //Nearby cross, linear decrease with no diagonals
@@ -13151,7 +13167,7 @@ struct skill_unit_group *skill_unitsetting(struct block_list *src, uint16 skill_
 					unit_val1 = 28 -4*unit_val1 -4*unit_val2;
 				if (unit_val1 < 1) unit_val1 = 1;
 				unit_val2 = 0;
-				break;
+				break;*/
 			case WM_REVERBERATION:
 				unit_val1 = 1 + skill_lv;
 				break;
@@ -13688,10 +13704,10 @@ int skill_unit_onplace_timer(struct skill_unit *unit, struct block_list *bl, uns
 						tsc->sg_counter=0; //Attack absorbed.
 					break;
 #endif
-				case GS_DESPERADO:
+				/*case GS_DESPERADO:
 					if (rnd()%100 < unit->val1)
 						skill_attack(BF_WEAPON,ss,&unit->bl,bl,sg->skill_id,sg->skill_lv,tick,0);
-					break;
+						*/
 				case SU_CN_METEOR:
 					if (sg->val1)
 						skill_area_temp[3] = 1;
