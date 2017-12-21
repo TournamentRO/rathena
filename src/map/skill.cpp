@@ -1176,9 +1176,8 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, uint1
 					}
 					// Automatic trigger of Falcon Assault when Soul Linked
 					if (pc_isfalcon(sd) && (skill = pc_checkskill(sd, SN_FALCONASSAULT))>0 &&
-						(sc && sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_HUNTER) &&
-						rnd() % 100 <= 15) {
-						rate = 15;
+						(sc && sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_HUNTER)) {
+						rate = 30;
 						skill_castend_damage_id(src, bl, SN_FALCONASSAULT, (skill<rate) ? skill : rate, tick, SD_LEVEL);
 					}
 					// Automatic trigger of Warg Strike [Jobbie]
@@ -5140,6 +5139,8 @@ int skill_castend_damage_id (struct block_list* src, struct block_list *bl, uint
 			}
 			// Original hit or chain hit depending on flag
 			skill_attack(BF_WEAPON,src,src,bl,skill_id,skill_lv,tick,(flag&0xFFF)>0?SD_ANIMATION:0);
+			//BROUGHT BACK WEIRDO DUAL HIT PROPERTY
+			skill_attack(BF_WEAPON, src, src, bl, skill_id, skill_lv, tick, SD_ANIMATION);
 		}
 		break;
 
@@ -7720,7 +7721,6 @@ int skill_castend_nodamage_id (struct block_list *src, struct block_list *bl, ui
 					sc_start(src, bl, SC_STRIPHELM, 100, skill_lv, 30000);
 					break;
 				}
-				pc_delitem(sd, ii, 1, 0, 0, LOG_TYPE_CONSUME);
 				clif_skill_nodamage(src, bl, skill_id, skill_lv, i);
 				break;
 			}

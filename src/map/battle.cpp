@@ -3479,6 +3479,10 @@ static int battle_calc_attack_skill_ratio(struct Damage wd, struct block_list *s
 				// ATK_ADDRATE(wd.damage, wd.damage2, 20);
 				skillratio *= 2;
 			}
+			if (sc && sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_HUNTER) {
+				// ATK_ADDRATE(wd.damage, wd.damage2, 15);
+				skillratio *= 1.5;
+			}
 				break;
 		case AC_SHOWER:
 		case MA_SHOWER:
@@ -3619,6 +3623,9 @@ static int battle_calc_attack_skill_ratio(struct Damage wd, struct block_list *s
 			skillratio += 75 * skill_lv;
 			break;
 		case MO_EXTREMITYFIST:
+			if (sstatus->sp > 6000)
+				skillratio += 100 * (7 + 6000 / 10);
+			else
 			skillratio += 100 * (7 + sstatus->sp / 10);
 			skillratio = min(500000,skillratio); //We stop at roughly 50k SP for overflow protection
 			break;
@@ -4512,9 +4519,14 @@ struct Damage battle_attack_sc_bonus(struct Damage wd, struct block_list *src, s
 #endif
 		if (sc->data[SC_SPIRIT]) {
 			if (skill_id == AS_SONICBLOW && sc->data[SC_SPIRIT]->val2 == SL_ASSASIN) {
-				ATK_ADDRATE(wd.damage, wd.damage2, map_flag_gvg2(src->m) ? 25 : 100); //+25% dmg on woe/+100% dmg on nonwoe
-				RE_ALLATK_ADDRATE(wd, map_flag_gvg2(src->m) ? 25 : 100); //+25% dmg on woe/+100% dmg on nonwoe
-			} else if (skill_id == CR_SHIELDBOOMERANG && sc->data[SC_SPIRIT]->val2 == SL_CRUSADER) {
+				ATK_ADDRATE(wd.damage, wd.damage2, map_flag_gvg2(src->m) ? 15 : 15); //+25% dmg on woe/+100% dmg on nonwoe
+				RE_ALLATK_ADDRATE(wd, map_flag_gvg2(src->m) ? 15 : 15); //+25% dmg on woe/+100% dmg on nonwoe
+			}
+			if (skill_id == AS_GRIMTOOTH && sc->data[SC_SPIRIT]->val2 == SL_ASSASIN) {
+				ATK_ADDRATE(wd.damage, wd.damage2, map_flag_gvg2(src->m) ? 30 : 30); //+25% dmg on woe/+100% dmg on nonwoe
+				RE_ALLATK_ADDRATE(wd, map_flag_gvg2(src->m) ? 30 : 30); //+25% dmg on woe/+100% dmg on nonwoe
+			}
+			else if (skill_id == CR_SHIELDBOOMERANG && sc->data[SC_SPIRIT]->val2 == SL_CRUSADER) {
 				ATK_ADDRATE(wd.damage, wd.damage2, 100);
 				RE_ALLATK_ADDRATE(wd, 100);
 			}
