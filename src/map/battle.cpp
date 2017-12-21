@@ -3481,7 +3481,7 @@ static int battle_calc_attack_skill_ratio(struct Damage wd, struct block_list *s
 			}
 			if (sc && sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_HUNTER) {
 				// ATK_ADDRATE(wd.damage, wd.damage2, 15);
-				skillratio *= 1.5;
+				skillratio *= 3/2;
 			}
 				break;
 		case AC_SHOWER:

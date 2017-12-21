@@ -472,6 +472,11 @@ ACMD_FUNC(mapmove)
 	if (mapindex)
 		m = map_mapindex2mapid(mapindex);
 
+	if (!pc_get_group_level(sd) && DIFF_TICK(gettick(), sd->canlog_tick) < 10000) {
+		clif_displaymessage(sd->fd, msg_txt(sd, 1505)); //Please wait %d seconds before Warping.
+		return -1;
+	}
+
 	if (!mapindex) { // m < 0 means on different server! [Kevin]
 		clif_displaymessage(fd, msg_txt(sd,1)); // Map not found.
 
@@ -497,6 +502,10 @@ ACMD_FUNC(mapmove)
 	}
 	if (pc_setpos(sd, mapindex, x, y, CLR_TELEPORT) != SETPOS_OK) {
 		clif_displaymessage(fd, msg_txt(sd,1)); // Map not found.
+		return -1;
+	}
+	if (pc_isdead(sd)) {
+		clif_displaymessage(fd, msg_txt(sd, 664)); // You cannot use this command when dead.
 		return -1;
 	}
 
@@ -1940,6 +1949,14 @@ ACMD_FUNC(go)
 
 	if( map[sd->bl.m].flag.nogo && !pc_has_permission(sd, PC_PERM_WARP_ANYWHERE) ) {
 		clif_displaymessage(sd->fd,msg_txt(sd,995)); // You cannot use @go on this map.
+		return 0;
+	}
+	if (pc_isdead(sd)) {
+		clif_displaymessage(fd, msg_txt(sd, 664)); // You cannot use this command when dead.
+		return 0;
+	}
+	if (!pc_get_group_level(sd) && DIFF_TICK(gettick(), sd->canlog_tick) < 10000) {
+		clif_displaymessage(sd->fd,msg_txt(sd,1505)); //Please wait %d seconds before Warping.
 		return 0;
 	}
 
