@@ -9273,9 +9273,16 @@ int pc_setregistry_str(struct map_session_data *sd, int64 reg, const char *val)
 	struct script_reg_str *p = NULL;
 	const char *regname = get_str(script_getvarid(reg));
 	unsigned int index = script_getvaridx(reg);
+	size_t vlen = 0;
 
 	if (!reg_load && !sd->vars_ok) {
 		ShowError("pc_setregistry_str : refusing to set %s until vars are received.\n", regname);
+		return 0;
+	}
+
+	if ( !script_check_RegistryVariableLength(1, val, &vlen ) )
+	{
+		ShowError("pc_check_RegistryVariableLength: Variable value length is too long (aid: %d, cid: %d): '%s' sz=%zu\n", sd->status.account_id, sd->status.char_id, val, vlen);
 		return 0;
 	}
 
@@ -9883,7 +9890,7 @@ bool pc_equipitem(struct map_session_data *sd,short n,int req_pos)
 	if(itemdb_isspecial(sd->inventory.u.items_inventory[n].card[0]))
 		; //No cards
 	else {
-		for( i = 0; i < id->slot; i++ ) {
+		for( i = 0; i < MAX_SLOTS; i++ ) {
 			struct item_data *data;
 			if (!sd->inventory.u.items_inventory[n].card[i])
 				continue;
@@ -9906,7 +9913,7 @@ bool pc_equipitem(struct map_session_data *sd,short n,int req_pos)
 		if(itemdb_isspecial(sd->inventory.u.items_inventory[n].card[0]))
 			; //No cards
 		else {
-			for( i = 0; i < id->slot; i++ ) {
+			for( i = 0; i < MAX_SLOTS; i++ ) {
 				struct item_data *data;
 				if (!sd->inventory.u.items_inventory[n].card[i])
 					continue;
@@ -9932,7 +9939,7 @@ bool pc_equipitem(struct map_session_data *sd,short n,int req_pos)
  *------------------------------------------*/
 bool pc_unequipitem(struct map_session_data *sd, int n, int flag) {
 	int i, iflag;
-	bool status_cacl = false;
+	bool status_calc = false;
 
 	nullpo_retr(false,sd);
 
@@ -10020,11 +10027,12 @@ bool pc_unequipitem(struct map_session_data *sd, int n, int flag) {
 	if ( sd->inventory_data[n] ) {
 		if( sd->inventory_data[n]->combos_count ) {
 			if( pc_removecombo(sd,sd->inventory_data[n]) )
-				status_cacl = true;
-		} if(itemdb_isspecial(sd->inventory.u.items_inventory[n].card[0]))
+				status_calc = true;
+		}
+		if(itemdb_isspecial(sd->inventory.u.items_inventory[n].card[0]))
 			; //No cards
 		else {
-			for( i = 0; i < sd->inventory_data[n]->slot; i++ ) {
+			for( i = 0; i < MAX_SLOTS; i++ ) {
 				struct item_data *data;
 
 				if (!sd->inventory.u.items_inventory[n].card[i])
@@ -10032,14 +10040,14 @@ bool pc_unequipitem(struct map_session_data *sd, int n, int flag) {
 				if ( ( data = itemdb_exists(sd->inventory.u.items_inventory[n].card[i]) ) != NULL ) {
 					if( data->combos_count ) {
 						if( pc_removecombo(sd,data) )
-							status_cacl = true;
+							status_calc = true;
 					}
 				}
 			}
 		}
 	}
 
-	if(flag&1 || status_cacl) {
+	if(flag&1 || status_calc) {
 		pc_checkallowskill(sd);
 		status_calc_pc(sd,SCO_NONE);
 	}
@@ -10054,7 +10062,7 @@ bool pc_unequipitem(struct map_session_data *sd, int n, int flag) {
 		if(itemdb_isspecial(sd->inventory.u.items_inventory[n].card[0]))
 			; //No cards
 		else {
-			for( i = 0; i < sd->inventory_data[n]->slot; i++ ) {
+			for( i = 0; i < MAX_SLOTS; i++ ) {
 				struct item_data *data;
 				if (!sd->inventory.u.items_inventory[n].card[i])
 					continue;
