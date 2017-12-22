@@ -2986,6 +2986,9 @@ static int status_get_hpbonus(struct block_list *bl, enum e_status_bonus type) {
 				bonus += 30;
 			if(sc->data[SC_CROSSBOWCLAN])
 				bonus += 30;
+			//Bonus Effect for Wizard & Sage Link 
+			if (sc->data[SC_SPIRIT] && (sc->data[SC_SPIRIT]->val2 == SL_WIZARD || sc->data[SC_SPIRIT]->val2 == SL_SAGE))
+				bonus += ((TBL_PC*)bl)->status.base_level * 200;
 		}
 	} else if (type == STATUS_BONUS_RATE) {
 		struct status_change *sc = status_get_sc(bl);
@@ -4078,8 +4081,8 @@ int status_calc_pc_(struct map_session_data* sd, enum e_status_calc_opt opt)
 	}
 	//Increase damage vs Boss and Holy Monsters for Star Gladiator
 	if (sc && sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_STAR) {
-		sd->right_weapon.addrace[CLASS_BOSS] += 50;
-		sd->left_weapon.addrace[CLASS_BOSS] += 50;
+		sd->right_weapon.addclass[CLASS_BOSS] += 100;
+		sd->left_weapon.addclass[CLASS_BOSS] += 100;
 		sd->right_weapon.addele[ELE_HOLY] += 50;
 		sd->left_weapon.addele[ELE_HOLY] += 50;
 	}
@@ -6326,6 +6329,8 @@ static signed short status_calc_flee2(struct block_list *bl, struct status_chang
 		flee2 += sc->data[SC_HISS]->val2;
 	if (sc->data[SC_DORAM_FLEE2])
 		flee2 += sc->data[SC_DORAM_FLEE2]->val1;
+	if (sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_STAR)
+		flee2 += 10;
 
 	return (short)cap_value(flee2,10,SHRT_MAX);
 }
