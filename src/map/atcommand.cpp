@@ -1956,6 +1956,7 @@ ACMD_FUNC(go)
 		return 0;
 	}
 	if (!pc_get_group_level(sd) && DIFF_TICK(gettick(), sd->canlog_tick) < 10000) {
+		//sprintf(atcmd_output, msg_txt(sd, 1505), sd->canlog_tick); //Please wait %d seconds before warping.
 		clif_displaymessage(sd->fd,msg_txt(sd,1505)); //Please wait %d seconds before Warping.
 		return 0;
 	}
