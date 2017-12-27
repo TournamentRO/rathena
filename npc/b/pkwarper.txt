@@ -1,0 +1,59 @@
+//======= pvp
+prontera,164,186,4	script	PvP Warper	730,{	
+
+	mes "[ ^FF00FF PvP Warper ^000000 ]";
+	mes "Which PVP Room do you want to enter?";
+	menu "Normal PvP ( " + getmapusers("guild_vs3") + " )",-, "No Donation PvP ( " + getmapusers("pvp_y_2-2") + " )", L_nodonate, "Baby PvP ( " + getmapusers("guild_vs5") + " )", L_baby, "No Pots PvP ( " + getmapusers("force_3-1") + " )", L_np, "Cancel",Lno;
+	next;
+		warp "guild_vs3",0,0;
+	close;
+
+L_nodonate:
+	warp "pvp_y_2-2",0,0;
+	close;
+
+L_baby:
+	if (class == 4023 || class == 4030 || class == 4037 || class == 4044 || class == 4024 || class == 4031
+		 || class == 4038 || class == 4045 || class == 4025 || class == 4032 || class == 4039 || class == 4026
+		  || class == 4033 || class == 4040 || class == 4027 || class == 4034 || class == 4041
+		   || class == 4028 || class == 4035 || class == 4042 || class == 4029 || class == 4036 || class == 4043) {
+				warp "guild_vs5",0,0;
+				close;
+			}
+	mes "[ ^FF00FF PvP Warper ^000000 ]";
+	mes "You're not a baby!";
+	close;
+
+L_np:
+	warp "force_3-1",100,100;
+	close;
+
+Lno:
+	mes "[ ^FF00FF PvP Warper ^000000 ]";
+	mes "Might be someday. Cya!";
+	close;
+
+}
+
+// --------- NPC Clones ---------
+aldebaran,134,120,5	duplicate(PvP Warper)	PvP Warper#h1-2	730
+
+//=========EXIT==PVP==WARPER===============	
+
+guild_vs3,50,17,3	script	Quitter	801,{	
+	
+mes "^FF00FF Exit?";
+menu "No",-,"Yes",L_yes;	
+close;
+
+L_yes:
+warp "prontera",0,0;	
+close;
+
+}
+	
+guild_vs5,77,50,3	duplicate(Quitter)	Quitter#h1-2	801
+force_2-1,100,125,1	duplicate(Quitter)	Quitter#h1-3	801
+pvp_y_2-2,128,40,1	duplicate(Quitter)	Quitter#h1-4	801
+
+//============================mapflags

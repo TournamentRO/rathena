@@ -1,0 +1,50 @@
+prontera,164,172,4	script	Bot Changer	84,{
+			mes "[Bot Changer]";
+			mes "Hello there.";
+			mes "I can change your Box of Thunder Box to 100 Box of Thunder, and vice versa.";
+			mes "Which do you need?";
+			menu "Box of Thunder to Box of Thunder Box",t_trade, "Box of Thunder Box to Box of Thunder",b_trade, "I dont need anything",-;
+			next;
+			mes "[Bot Changer]";
+			mes "Very well, have a nice day.";
+			close;
+t_trade:
+	next;
+	if(countitem(12028) < 100) goto t_fail;
+	if (checkweight(30110,1) == 0 ) goto t_OverWeight;
+	delitem 12028,100;
+	mes "[Bot Changer]";
+	mes "Ok, here's Your ^0000FFBox of Thunder Box^000000.";
+	getitem 30110,1;
+	close;
+
+t_fail:
+	next;
+	mes "[Bot Changer]";
+	mes "I'm terribly sorry, but you do not have enough box of thunder for this box.";
+	next;
+	mes "[Berry Changer]";
+	mes "Please come back when you have the correct ammount.";
+	close;
+
+b_trade:
+	next;
+	if(countitem(30110) < 1) goto b_fail;
+	if (checkweight(12028,100) == 0 ) goto t_OverWeight;
+	delitem 30110,1;
+	mes "[Bot Changer]";
+	mes "Ok, here's Your ^0000FF100 Box of Thunder^000000.";
+	getitem 12028,100;
+	close;
+
+b_fail:
+	next;
+	mes "[Bot Changer]";
+	mes "It seems you don't have that box.";
+	close;
+t_Overweight:
+	next;
+	mes "[Bot Changer]";
+	mes "It seems you are overweight.";
+	close;
+}

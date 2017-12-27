@@ -1,0 +1,85 @@
+prt_in,45,112,4	script	Hokage Collector	459,{
+
+
+	if( Weight >= ( MaxWeight / 2 ) ){
+	mes "^FF0000You are overweight!^000000";
+	close;
+}
+
+			mes "[Swagger]";
+			mes "Hi! I collect Hokage stuffs, what do you want me to trade you?";
+			next;
+			mes "[Swagger]";
+			mes "It's for free! But make sure there isn't a card on that headgear!";
+			mes "If it does have a card, you are going to lose your card!";
+			menu "Hokage Hat to Hokage Sunglasses",t_trade, "Hokage Sunglasses to Hokage Hat",b_trade, "I dont need anything",-;
+			next;
+			mes "[Berry Changer]";
+			mes "Very well, have a nice day.";
+			close;
+t_trade:
+	next;
+	if(getequipid(1) == 20000){
+	if(getequipcardid(1,0) > 1) goto L_hascard;
+	if(countitem(20000) < 1) goto t_fail;
+	if(countitem(20000) > 1) goto t_multiple;
+	if (checkweight(5047,1) == 0 ) goto t_OverWeight;
+	delitem 20000,1;
+	mes "[Swagger]";
+	mes "Ok, here's Your ^0000FFHokage Sunglasses^000000.";
+	getitem 5047,1;
+	close;
+	} else {
+	mes "[Swagger]";
+	mes "Please equip your Hokage Hat";
+	close;
+	}
+t_fail:
+	next;
+	mes "[Swagger]";
+	mes "You can't trick me! I'm a trained hokage!";
+	close;
+	
+t_multiple:
+	next;
+	mes "[ Swagger ]";
+	mes "Make sure that you only have ^FF0000 1 Hokage Hat ^000000 in your inventory";
+	close;
+
+b_trade:
+	next;
+	if(getequipid(1)==5047){
+	if(getequipcardid(1,0) > 1) goto L_hascard;
+	if(countitem(5047) < 1) goto b_fail;
+	if(countitem(5047) > 1) goto b_multiple;
+	if(getequipcardcnt(5047) > 0) goto L_hascard;
+	if (checkweight(20000,1) == 0 ) goto t_OverWeight;
+	delitem 5047,1;
+	mes "[Swagger]";
+	mes "Ok, here's Your ^0000FFHokage Hat^000000.";
+	getitem 20000,1;
+	close;
+	} else {
+	mes "[Swagger]";
+	mes "Please equip your Hokage Sunglasses";
+	close;
+	}
+b_fail:
+	next;
+	mes "[Swagger]";
+	mes "You can't trick me! I'm a trained hokage!";
+	close;
+	
+b_multiple:
+	next;
+	mes "[ Swagger ]";
+	mes "Make sure that you only have ^FF0000 1 Hokage Sunglasses ^000000 in your inventory";
+	close;
+	
+L_hascard:
+	next;
+	mes "[ Swagger ]";
+	mes "Removed the compounded card first";
+	mes "or else your gonna cry!!";
+	close;
+}

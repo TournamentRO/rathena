@@ -1,0 +1,51 @@
+-	script	shower	-1,{
+
+OnInit:
+	bindatcmd "shower", strnpcinfo(0)+"::OnShower",60,99;
+	end;
+
+OnShower:
+	.@shitemid = atoi(.@atcmd_parameters$[0]);
+	.@shamount = atoi(.@atcmd_parameters$[1]);
+	if ( !.@shamount ){
+	message strcharinfo(0), "@shower failed, please use code syntax";
+	message strcharinfo(0), "@shower <Itemid or itemname> <amount between 1-10000>";
+	end;
+	}
+	if ( .@shamount < 0 ){
+	message strcharinfo(0), "@shower failed";
+	message strcharinfo(0), "@shower -> Invalid amount";
+	end;
+	}
+	if ( .@shamount > 500 ){
+	message strcharinfo(0), "@shower failed, you can only shower 500 items at a time";
+	end;
+	}
+	if ( getitemname(.@shitemid) == "null" && !searchitem(.@temp[0],.@atcmd_parameters$[0]) ){
+	message strcharinfo(0), "@shower failed";
+	message strcharinfo(0), "@shower -> Invalid Item ID";
+	end;
+	}
+	set .map$,strcharinfo(3);
+	.range = getarraysize(.map$);
+	if(.@temp[0])
+	.@dropitemid = .@temp[0];
+	else
+	.@dropitemid = .@shitemid;
+	.@r = (sqrt(.@shamount) > 16 ? 16 :sqrt(.@shamount));
+	getmapxy(.@m$,.@px,.@py,0);
+	.@min_x =((.@px-.@r) < 1?1:(.@px-.@r));
+	.@max_x =((.@px+.@r) > 512 ? 512:(.@px+.@r));
+	.@min_y =((.@py-.@r) < 1?1:(.@py-.@r));
+	.@max_y =((.@py+.@r) > 512 ? 512:(.@py+.@r));
+	freeloop(1);
+	for(.@i=0;.@i<.range;.@i++) {
+		for(.@j=0;.@j< .@shamount;.@j++) {
+			while (checkcell(.map$[.@i],.@dx=rand(.@min_x, 	.@max_x),.@dy=rand(.@min_y , .@max_y), cell_chknopass));
+			makeitem .@dropitemid,1,.@m$,.@dx,.@dy;
+	}
+	message strcharinfo(0), "All items showered";
+	}
+	freeloop(0);
+    end;
+}

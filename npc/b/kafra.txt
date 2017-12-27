@@ -1,0 +1,55 @@
+// Prontera Center
+//============================================================
+prontera,158,193,3	script	Kafra Service#999	423,{
+	cutin "kafra_05",2;
+	mes "[Kafra Main]";
+	mes "Hm...?";
+	mes "Oh, welcome to";
+	mes "the Kafra Corporation";
+	mes "Headquarters. Did you";
+	mes "need something?";
+	next;
+	switch(select("Save:Use Storage:Cancel")) {
+	case 1:
+		mes "[Kafra Main]";
+		mes "Your Respawn Point has";
+		mes "been saved.";
+		next;
+		savepoint "prontera",155,180;
+		mes "[Kafra Main]";
+		mes "Please make use of";
+		mes "the Kafra Services that are";
+		mes "available throughout all of";
+		mes "Rune Midgard.";
+		close2;
+		break;
+	case 2:
+		mes "[Kafra Main]";
+		mes "Although this facility is";
+		mes "exclusively intended for";
+		mes "the training of Kafra Employee";
+		mes "and administrative functions,";
+		mes "I'll access your Storage for you.";
+		next;
+		mes "[Kafra Main]";
+		mes "In the future, please";
+		mes "ask the Kafra Employee on";
+		mes "duty if you wish to use";
+		mes "any of the Kafra Services.";
+		mes "Thank you for your patronage.";
+		close2;
+		openstorage;
+		break;
+	case 3:
+		mes "[Kafra Main]";
+		mes "Great, because I'm";
+		mes "actually on my break";
+		mes "right now. Choosing";
+		mes "''Cancel'' was a good";
+		mes "move on your part.";
+		close2;
+		break;
+	}
+	cutin "",255;
+	end;
+}

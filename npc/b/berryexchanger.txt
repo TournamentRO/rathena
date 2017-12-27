@@ -1,0 +1,50 @@
+prontera,164,174,4	script	Berry Changer	90,{
+			mes "[Berry Changer]";
+			mes "Hello there.";
+			mes "I can change your Yggdrasil Box to 100 Yggdrasil Berry, and vice versa.";
+			mes "Which do you need?";
+			menu "Yggdrasilberry to Yggdrasil Box",t_trade, "Yggdrasil Box to Yggdrasilberry",b_trade, "I dont need anything",-;
+			next;
+			mes "[Berry Changer]";
+			mes "Very well, have a nice day.";
+			close;
+t_trade:
+	next;
+	if(countitem(607) < 100) goto t_fail;
+	if (checkweight(13517,1) == 0 ) goto t_OverWeight;
+	delitem 607,100;
+	mes "[Berry Changer]";
+	mes "Ok, here's Your ^0000FFYggdrasil Box^000000.";
+	getitem 13517,1;
+	close;
+
+t_fail:
+	next;
+	mes "[Berry Changer]";
+	mes "I'm terribly sorry, but you do not have enough berry for this box.";
+	next;
+	mes "[Berry Changer]";
+	mes "Please come back when you have the correct ammount.";
+	close;
+
+b_trade:
+	next;
+	if(countitem(13517) < 1) goto b_fail;
+	if (checkweight(607,100) == 0 ) goto t_OverWeight;
+	delitem 13517,1;
+	mes "[Berry Changer]";
+	mes "Ok, here's Your ^0000FF100 Yggdrasil Berry^000000.";
+	getitem 607,100;
+	close;
+
+b_fail:
+	next;
+	mes "[Berry Changer]";
+	mes "It seems you don't have that box.";
+	close;
+t_Overweight:
+	next;
+	mes "[Berry Changer]";
+	mes "It seems you are overweight.";
+	close;
+}

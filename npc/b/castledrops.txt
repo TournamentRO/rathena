@@ -1,0 +1,80 @@
+//=============Valkyrie Quest==============
+//===================== BTS =====================================================
+
+auction_01,193,87,5	script	Castle Drop	804,{	
+
+if( Weight >= ( MaxWeight / 2 ) ){
+	mes "^FF0000You are overweight!^000000";
+	close;
+	}
+
+	mes "^008771[ Castle Drop Seller ]^000000";
+	mes "I am here to sell some castle drops!";
+	next;
+	mes "^008771[ Castle Drop Seller ]^000000";
+	mes "You only need 300 Credits per castle drop.";
+	mes "^FF0000Note^000000: You can get a random castle drop not alphabetical order.";
+
+	next;
+	mes "^008771[ Castle Drop Seller ]^000000";
+	mes "These are the castle drops:";
+	mes "^FF0000Note^000000: 1 random castle drop only.";
+	mes "- ^9F79EERipple^000000";
+	mes "- ^9F79EEBillow^000000";
+	mes "- ^9F79EEEmblem of Sun God^000000";
+	mes "- ^9F79EESilver Ornament^000000";
+	mes "- ^9F79EEWrath of Valkyrie^000000";
+	next;
+	mes "^008771[ Castle Drop Seller ]^000000";
+	mes "So are you up into it?";
+	menu "Yes!",-, "No.",L_Unfathomable;
+		
+		
+	mes "^008771[ Castle Drop Seller ]^000000";
+	mes "Let me check your credits";
+	next;
+	if(countitem(30005) < 300) goto L_NotEnough;
+
+	delitem 30005,300;
+	
+	mes "^008771[ Castle Drop Seller ]^000000";
+	mes "So thank you for the help";
+	next;
+	
+	switch (select("Your Welcome")) {
+	
+	case 1: // Castle Drops
+			set .@gamble1,rand(1,500);
+			if ((.@gamble1 > 200) && (.@gamble1 < 205)) {
+				set .@gamble2,rand(1,10);
+				if      ((.@gamble2 > 0) && (.@gamble2 <  3)) set .@item,7090; // esg
+				else if ((.@gamble2 > 2) && (.@gamble2 <  5)) set .@item,7091; // ripple
+				else if ((.@gamble2 > 4) && (.@gamble2 <  7)) set .@item,7086; // billow
+				else if ((.@gamble2 > 6) && (.@gamble2 <  9)) set .@item,7077; // silver
+				else if ((.@gamble2 > 8) && (.@gamble2 < 11)) set .@item,7078; // wov
+			}
+			else if ((.@gamble1 >   0) && (.@gamble1 < 201)) set .@item,7090; // esg
+			else if ((.@gamble1 > 204) && (.@gamble1 < 301)) set .@item,7091; // ripple
+			else if ((.@gamble1 > 300) && (.@gamble1 < 401)) set .@item,7086; // billow
+			else if ((.@gamble1 > 401) && (.@gamble1 < 481)) set .@item,7077; // silver
+			else if ((.@gamble1 > 480) && (.@gamble1 < 501)) set .@item,7078; // wov
+	break;
+
+	}
+	
+	getitem .@item,1;
+
+	mes "^008771[ Castle Drop Seller ]^000000";
+	mes "Thank you for your help";
+	close;	
+
+L_NotEnough:
+	mes "^008771[Castle Drop Seller]^000000";
+	mes "You don't have enough credits.";
+	close;
+
+L_Unfathomable:
+	mes "^008771[Castle Drop Seller]^000000";
+	mes "Please return when you change your mind.";
+	close;
+}

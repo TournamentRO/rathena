@@ -1,0 +1,55 @@
+//===== Hourly Points Script ======================================
+//===== By: =======================================================
+//= GorthexTiger modified by Nibi
+//===== Current Version: ==========================================
+//= 1.0
+//===== Compatible With: ==========================================
+//= Any eAthena Version
+//===== Description: ==============================================
+//= Get Points every successful hours of gameplay, you cannot get
+//=	the points even if you miss a second or a minute. A player will
+//=	get a very big bonus if they played 12 hours consecutively
+//=	or without logging out of the game. If the player is vending
+//= the script will then stop.
+//===== Additional Comments: ======================================
+//= You can modify the script to your liking.
+//=================================================================
+
+-	script	hourlypoints	-1,{
+
+//--Start of the Script
+OnPCLoginEvent:
+attachnpctimer ""+strcharinfo(0)+"";
+initnpctimer;
+end;
+
+OnTimer60000:
+set @minute, @minute + 1;
+if(@minute == 60){
+	set @minute,0;
+	set .@point_amt, 10; //Points to get every hour (default: 10)
+	if(checkVending()== 1) {
+		dispbottom "The hourly points event stopped because you are currently vending you can relog to start again.";
+		stopnpctimer;
+		end;
+		}
+	else {
+		set #KAFRAPOINTS, #KAFRAPOINTS + .@point_amt;
+		dispbottom "You received "+.@point_amt+" Hourly Points by staying ingame for 1 hour";
+		dispbottom "Current Balance = "+#KAFRAPOINTS+" Hourly Points";
+		set @consecutive_hour, @consecutive_hour + 1;
+		}
+	}
+	if(@consecutive_hour == 12) {
+	set @consecutive_hour,0;
+	set .@cpoint_amt, 50; //Points to get for 12 Consecutive hours (default: 50)
+	set #KAFRAPOINTS, #KAFRAPOINTS + .@point_amt;
+	dispbottom "You receive "+.@cpoint_amt+" Hourly Points in playing for 12 consecutive hours";
+	dispbottom "Current Balance = "+.@point_var$+" Hourly Points";
+	}
+stopnpctimer;
+initnpctimer;
+end;
+
+}
+//--End of the Script

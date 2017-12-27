@@ -1,0 +1,16 @@
+-	script	atcmd_token	-1,{
+OnInit:
+	bindatcmd("token","atcmd_token::OnAtcommand",0,99);
+	end;
+
+OnAtcommand:
+	if( getmapflag(strcharinfo(3),mf_noteleport) || getmapflag(strcharinfo(3),mf_noteleport) ) {
+		message strcharinfo(0),"@token failed.";
+		end;
+	}
+	if( .@atcmd_numparameters > 0 )
+ 		unittalk 0, "@token " +implode(.@atcmd_parameters$, " ");
+ 	else
+ 		warp "yuno_in01",109,158;
+ 	end;	
+}

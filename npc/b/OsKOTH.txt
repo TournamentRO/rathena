@@ -1,0 +1,164 @@
+// Edited version by painisinsane/Eclipse.
+// Creator of EclipseRO
+// Please dont remove Credits!
+// Credits: http://www.paste-it.net/public/a5d2cd4/
+
+mjolnir_04	mapflag	nobranch
+mjolnir_04	mapflag	restricted	1
+mjolnir_04	mapflag	nocommand
+
+-	script	KOTH#announcer	-1,{
+
+OnInit:
+	disablenpc "kothwarp";
+	end;
+
+OnCLock0000:
+OnClock0800:
+OnClock1600:
+
+announce "King of the hill event will now start!",bc_all,0x9F79EE;
+enablenpc "kothwarp";
+sleep2 2000;
+announce "Participants please proceed to phtownall 200 215!",bc_all,0x9F79EE;
+sleep2 2000;
+announce "Only a level 1 novice can join the event!",bc_all,0x9F79EE;
+sleep2 10000;
+announce "The event is simple, the first to reach the bridge at the end will win!",bc_all,0x9F79EE;
+sleep2 10000;
+announce "Countdown will start in 30 seconds.",bc_all,0x9F79EE;
+sleep2 30000;
+announce "Starting countdown.",bc_all,0x9F79EE;
+sleep2 1000;
+announce "5",bc_all,0x9F79EE;
+sleep2 1000;
+announce "4",bc_all,0x9F79EE;
+sleep2 1000;
+announce "3",bc_all,0x9F79EE;
+sleep2 1000;
+announce "2",bc_all,0x9F79EE;
+sleep2 1000;
+announce "1...",bc_all,0x9F79EE;
+sleep2 750;
+stopnpctimer;
+set $@COTH,1;
+announce "GO!!!",bc_all,0x9F79EE;
+disablenpc "kothwarp";
+end;
+}
+//==========KOTH============
+mjolnir_04,80,302,5	script	King of the Hill#exit	108,{
+mes "Do you want to get out of here?";
+menu "Yes",-,"No",Lno;
+next;
+warp "phtownall",0,0;
+close;
+
+Lno:
+close;
+
+}
+
+phtownall,200,215,3	script	King of the Hill::kothwarp	723,{
+if(BaseLevel != 1 || Class != Novice) goto Lnotnov;
+mes "Do you want to join the Novice King of the Hill?";
+menu "Yes",-,"No",Lno;
+next;
+atcommand "@die";
+atcommand "@alive";
+atcommand "@storeall";
+warp "mjolnir_04",80,300;
+close;
+
+Lno:
+close;
+
+Lnotnov:
+mes "[ Novice KOTH ]";
+mes "You are neither a novice nor level 1";
+close;
+
+}
+mjolnir_04,99,306,5	script	Starting Line#2::kothmain	111,3,22,{
+
+
+OnTouch:
+if(getgmlevel() > 45) goto Lstartevent;
+if($@COTH < 1) warp "mjolnir_04",88,303;
+end;
+
+
+Lstartevent:
+mes "[ ^FF00FF King of the Hill ^000000 ]";
+mes "Do you want to start the KOTH event?";
+menu "Yes",-,"No",L_no;
+next;
+mes "[ ^FF00FF King of the Hill ^000000 ]";
+mes "Okay, i will inform them now";
+close2;
+goto startkoth;
+
+startkoth:
+announce "King of the hill event will now start!",bc_all,0x9F79EE;
+enablenpc "kothwarp";
+sleep2 2000;
+announce "Participants please proceed to phtownall 200 215!",bc_all,0x9F79EE;
+sleep2 2000;
+announce "Only a level 1 novice can join the event!",bc_all,0x9F79EE;
+sleep2 10000;
+announce "The event is simple, the first to reach the bridge at the end will win!",bc_all,0x9F79EE;
+sleep2 10000;
+announce "Countdown will start in 30 seconds.",bc_all,0x9F79EE;
+sleep2 30000;
+announce "Starting countdown.",bc_all,0x9F79EE;
+sleep2 1000;
+announce "5",bc_all,0x9F79EE;
+sleep2 1000;
+announce "4",bc_all,0x9F79EE;
+
+sleep2 1000;
+announce "3",bc_all,0x9F79EE;
+
+sleep2 1000;
+announce "2",bc_all,0x9F79EE;
+
+
+sleep2 1000;
+announce "1...",bc_all,0x9F79EE;
+
+sleep2 750;
+stopnpctimer;
+set $@COTH,1;
+announce "GO!!!",bc_all,0x9F79EE;
+disablenpc "kothwarp";
+end;
+
+
+L_no:
+close;
+
+
+}
+
+mjolnir_04,135,208,5	script	Finish Line!	-1,2,2,{
+
+
+
+OnTouch:		
+if($@COTH < 1) close;
+if($@COTH == 1)
+
+announce strcharinfo(0)+" is the King of the Hill!!",bc_all,0x9F79EE;
+set $@COTH,0;
+getitem 675,2;
+atcommand "@gvgon";
+atcommand "@doommap";
+atcommand "@gvgoff";
+atcommand "@storeall";
+warp "phtownall",0,0;
+end;
+
+
+
+
+}

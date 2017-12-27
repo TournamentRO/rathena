@@ -1,0 +1,35 @@
+-	script	SpawnPoring	-1,{
+OnMinute180:
+OnClock0000:
+OnClock0300:
+OnClock0600:
+OnClock0900:
+OnClock1200:
+OnClock1500:
+OnClock1800:
+OnClock2100:
+if( .SummonNextHour ){
+set .Random,Rand(GetArraySize(.TOWNS$));
+Monster(.TOWNS$[.Random], 0, 0, "Pori Pori", 1502, 1, "SpawnPoring::OnPoringDeath");
+announce "A boss is destroying our city! Help us!",bc_all,0x800517;
+sleep 1000;
+announce "Hurry before it dominate the whole "+.TOWNS$[.Random]+"!",bc_all,0x800517;
+sleep 1000;
+announce "This monster is quite elusive! so please beat it up!",bc_all,0x800517; 
+}else{
+announce "No Poring Will be Summon in this Hour due to Last 2 Hours Poring Event no Participants.",0;
+set .SummonNextHour,1;
+}
+End();
+
+OnPoringDeath:
+getitem 675,1;
+announce "Good job keeping our city safe!",bc_all,0xFFFF00;
+set .SummonNextHour,1;
+End();
+
+OnInit:
+set .SummonNextHour,1;
+SetArray(.TOWNS$, "geffen", "morocc", "payon", "alberta", "izlude", "aldebaran", "xmas", "comodo", "yuno", "amatsu", "gonryun", "louyang");
+End();
+}

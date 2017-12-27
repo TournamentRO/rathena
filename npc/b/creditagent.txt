@@ -1,0 +1,65 @@
+//===== eAthena Script ======================================================================
+//= Platinum Coin Exchanger
+//===== By: =================================================================================
+//= OneeChan
+//===== Current Version: ====================================================================
+//= 1.0
+//===== Compatible With: ====================================================================
+//= Any eAthena Version
+//===== Description: ========================================================================
+//= Changes Platinum Coin To Zeny and Zeny To Platinum Coin
+//= Platinum Coin = 10M
+//===== Additional Comments: ================================================================
+//=Updates
+//=Version 1.2 : Added CheckWeight
+//
+//===========================================================================================
+//Platinum Coin Exchanger
+
+prontera,138,181,5,	script	Credit Exchanger	109,{
+
+	mes	"[Credit Exchanger]";
+	mes	"I can change credits and zeny";
+	next; 
+	mes	"[Credit Exchanger]";
+	mes	"Do you want to continue?";
+	menu "Yes",-,"No",G_no;
+	next;
+	mes	"[Credit Exchanger]";
+	mes	"What do you want?";
+	mes	"10,000,000 = 1 Credit";
+	menu "Credits To Zeny",-,"Zeny To Credits",ztc;
+	next;
+	mes	"[Credit Exchanger]";
+	mes	"Put the Number of Credits you Need";
+	mes	"I can only exchange ^ff000050 Credits^000000 at a time";
+	input .@t;
+	if( .@t < 0 )||( countitem(30005) < .@t )||( .@t > 50 ){ close; }
+	set Zeny,Zeny+10000000*.@t;
+	delitem 30005,.@t;
+	close;
+ztc:
+	next;
+	mes	"[Credit Exchanger]";
+	mes	"Put the Number of Credits to be changed";
+	mes	"Please be reminded that I can only exchange ^ff000050 Credits^000000 at a time";
+	input .@t;
+	if (checkweight(30005,.@t)) {
+	if( Zeny < 10000000*.@t )||( .@t >50 ){ close; }
+	set Zeny,Zeny-10000000*.@t;
+	getitem 30005,.@t;
+	} else {
+	mes "You don't have enough space in your inventory.";
+}
+close;
+
+G_no:
+    mes "[Credit Exchanger]";
+    mes "Please use my service next time";
+    close;
+end;
+}
+
+// --------- NPC Clones ---------
+payon,148,220,5	duplicate(Credit Exchanger)	Credit Exchanger#h1-2	109
+aldebaran,134,111,5	duplicate(Credit Exchanger)	Credit Exchanger#h1-3	109

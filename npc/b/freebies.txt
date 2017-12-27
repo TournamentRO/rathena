@@ -1,0 +1,26 @@
+prontera,148,190,4	script	Newbie Helper	436,{
+		
+		mes "[ Blessing ]";
+		mes "How can i help you?";
+		menu "Get freebies",L_Freebies,"I dont need any help",L_No;
+		
+L_Freebies:
+		next;
+		if( #Freebies ){
+			mes "You have taken the Freebies before.";
+		}else{
+		mes "[ Blessing ]";
+		mes "There you go...";
+		set #Freebies,1;
+		getitem 32047,1;	//svh
+		getitem 32046,2;	//sva
+		getitem 32048,2;	//svm
+		getitem 32049,2;	//svshield
+		getitem 32050,2;	//svshoes
+		getitem 32072,1;	//whitecyc
+		getitem	2614,2;		//eye of dulhala
+		}
+OnInit:
+waitingroom "Freebies!!",0;
+end;
+}

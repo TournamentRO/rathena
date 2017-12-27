@@ -1,0 +1,71 @@
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//	Broadcaster NPC:
+//	version: 1.0
+//	Custom Server NPC:
+//	scripted: BrainWind
+//	
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+prontera,144,176,4	script	Broadcaster	114,{
+if( agitcheck() || agitcheck2() ){
+	mes "^FF0000You cannot Broadcast during WOE time.^000000";
+	close;
+}
+if( BaseLevel < 150 ){
+	mes @header$;
+	mes "You need to be level 150 and above to use the broadcaster";
+	close;
+}
+	//what's the npc name to show in messages?
+		set @npcname$, "Broadcaster";
+	//NPC Headers Name:
+		set @header$,"[^0000ff" + @npcname$ + "^000000]";
+	//NPC COST PER Broadcast:
+		set @broadcastfee, 2000000;
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		mes @header$;
+		mes "Hi, I'm the Broadcaster";
+		mes "I can Broadcast a message for you";
+		next;
+		mes @header$;
+		mes "It costs ^ff0000"+ @broadcastfee +"^000000 zeny ";
+	next;
+	mes @header$;
+	mes "Would you like to Broadcast?";
+	switch (select("Yes","No")){
+		case 1:
+				if(Broadcast> gettimetick(2)) {
+				next;
+				mes @header$;
+				mes "Sorry you have to wait for 3min.";
+				close;
+				}
+			next;
+			mes @header$;
+			if(Zeny<1000000) goto $nozenybc;
+			set Zeny,zeny - @broadcastfee;
+			mes "Please input your message.";
+			next;
+			input broadcast$;
+			announce "[ Shout ] "+strcharinfo(0)+": "+broadcast$+"",0,0xB1FB17;
+			close2;
+			set Broadcast, gettimetick(2)+180;
+			dispbottom "Broadcaster: Please wait for 3min until next broadcast to avoid flooding.";
+			end;
+		case 2:
+			mes "Suit yourself";
+			close;
+	}
+$nozenybc:
+	mes "I have to check that you have";
+	mes "enough money";
+	next;
+	mes @header$;
+	mes "Im sorry but you dont have ^ff0000"+broadcastfee+"^000000 zeny";
+	mes "Go get it if you want to Broadcast";
+	close;
+}
+
+payon.gat,164,223,5	duplicate(Broadcaster)	Broadcaster#4	114
+louyang.gat,211,49,5	duplicate(Broadcaster)	Broadcaster#13	114
+rachel.gat,136,118,3	duplicate(Broadcaster)	Broadcaster#18	114
+prontera.gat,182,214,3	duplicate(Broadcaster)	Broadcaster#23	114

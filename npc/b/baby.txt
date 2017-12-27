@@ -1,0 +1,329 @@
+prontera,149,194,4	script	Baby Jobchanger	703,{
+
+	set .@name$,"[ ^CC00CCBaby Jobchanger^000000 ]";
+	
+	if (Class == 0) goto L_WantBabyNovice;
+	if (Class == 4023) goto L_BabyFirst;
+	if ((Class >= 4024) && (Class <= 4029)) goto L_BabySecond;
+	if (Class == 4045) goto L_Cant;
+	if ((Class >= 4096) && (Class <=4108)) goto L_Cant;
+	
+	mes .@name$;
+	mes "S-S-Sorry but i can't do anything for you...you... you big person!!";
+	close;
+	
+L_WantBabyNovice:
+	
+	mes .@name$;
+	mes "Hi "+strcharinfo(0)+",";
+	mes "would you like to be a Baby Novice?";
+	next;
+	menu "Yes, please ^.^",-,"No, thanks.",L_Cancel;
+	
+	if (JobLevel < 10) goto L_JobLevel;
+	if (SkillPoint > 0) goto L_SkillPoints;
+	set BaseLevel, 1;
+	set JobLevel, 1;
+    resetstatus;
+	resetskill;
+	set SkillPoint, 0;
+    set StatusPoint, 30;
+	jobchange 4023;
+	mes .@name$;
+	mes "Okay! Congratulation " +strcharinfo(0)+ ", you're now a Baby Novice!";
+	close;
+	
+L_BabyFirst:
+
+	mes .@name$;
+	mes "Welcome back "+strcharinfo(0)+",";
+	mes "would you like to change to your 1st Baby Class.?";
+	next;
+	menu "Yes, please ^.^",L_Weiter,"No, thanks.",L_Cancel;
+	
+L_Weiter:
+	
+	mes .@name$;
+	mes "Alright, then please choose your Job now!";
+	next;
+	menu "Baby Swordsman",L_BabyS,"Baby Mage",L_BabyM,"Baby Archer",L_BabyArch,"Baby Acolyte",L_BabyAco,"Baby Merchant",L_BabyMerch,"Baby Thief",L_BabyThief,"Super Baby!",L_SuperBaby;
+	
+L_SuperBaby:
+	if (JobLevel < 10) goto L_JobLevel;
+	if (SkillPoint > 0) goto L_SkillPoints;
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4045;
+	mes .@name$;
+	savepoint "prontera", 159, 179;
+	mes "Okay! Congratulation " +strcharinfo(0)+ ", you're now a Super Baby!";
+	close;
+
+L_BabyS:
+	if (JobLevel < 10) goto L_JobLevel;
+	if (SkillPoint > 0) goto L_SkillPoints;
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4024;
+	mes .@name$;
+	mes "Okay! Congratulation " +strcharinfo(0)+ ", you're now a Baby Swordsman!";
+	close;
+
+L_BabyM:
+	if (JobLevel < 10) goto L_JobLevel;
+	if (SkillPoint > 0) goto L_SkillPoints;
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4025;
+	mes .@name$;
+	mes "Okay! Congratulation " +strcharinfo(0)+ ", you're now a Baby Magician!";
+	close;
+
+L_BabyArch:
+	if (JobLevel < 10) goto L_JobLevel;
+	if (SkillPoint > 0) goto L_SkillPoints;
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4026;
+	mes .@name$;
+	mes "Okay! Congratulation " +strcharinfo(0)+ ", you're now a Baby Archer!";
+	close;
+
+L_BabyAco:
+	if (JobLevel < 10) goto L_JobLevel;
+	if (SkillPoint > 0) goto L_SkillPoints;
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4027;
+	mes .@name$;
+	mes "Okay! Congratulation " +strcharinfo(0)+ ", you're now a Baby Acolyte!";
+	close;
+
+L_BabyMerch:
+	if (JobLevel < 10) goto L_JobLevel;
+	if (SkillPoint > 0) goto L_SkillPoints;
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4028;
+	mes .@name$;
+	mes "Okay! Congratulation " +strcharinfo(0)+ ", you're now a Baby Merchant!";
+	close;
+
+L_BabyThief:
+	if (JobLevel < 10) goto L_JobLevel;
+	if (SkillPoint > 0) goto L_SkillPoints;
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4029;
+	mes .@name$;
+	mes "Okay! Congratulation " +strcharinfo(0)+ ", you're now a Baby Thief!";
+	close;
+	
+L_BabySecond:
+
+	mes .@name$;
+	mes "Hi there " +strcharinfo(0)+ ".";
+	mes "Would you like to change to the 2nd Class. now?";
+	next;
+	menu "Yes *.* Do it!",-,"No, thanks.",L_Cancel;
+	
+	if (Class == 4024) goto L_BabyKnight;
+	if (Class == 4025) goto L_BabyMagician;
+	if (Class == 4026) goto L_BabyHunter;
+	if (Class == 4027) goto L_BabyAcoChoice;
+	if (Class == 4028) goto L_BabyMerchChoice;
+	if (Class == 4029) goto L_BabySinStalk;
+	
+L_BabyKnight:
+	if (JobLevel < 40) goto L_JobLevel;
+	mes .@name$;
+	mes "Would you like to be a Baby Knight, or a Crusader?";
+	next;
+	menu "Knight",L_BabyKn,"Crusader",L_Sader;
+
+L_BabyKn:
+	mes .@name$;
+	savepoint "prontera", 159, 179;
+	mes "Excellent " +strcharinfo(0)+ ", you're now a Baby Knight!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4030;
+	close;
+
+L_Sader:
+	mes .@name$;
+	savepoint "prontera", 159, 179;
+	mes "Excellent " +strcharinfo(0)+ ", you're now a Baby Crusader!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4037;
+	close;
+
+L_BabyMagician:
+	if (JobLevel < 40) goto L_JobLevel;
+	mes .@name$;
+	mes "Would you like to be a Baby Wizard, or a Sage?";
+	next;
+	menu "Wizard",L_Wiz,"Sage",L_Sage;
+
+L_Wiz:
+	mes .@name$;
+	savepoint "prontera", 159, 179;
+	mes "Excellent " +strcharinfo(0)+ ", you're now a Baby Wizard!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4032;
+	close;
+
+L_Sage:
+	mes .@name$;
+	savepoint "prontera", 159, 179;
+	mes "Excellent " +strcharinfo(0)+ ", you're now a Baby Sage!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4039;
+	close;
+
+L_BabyHunter:
+	if (JobLevel < 40) goto L_JobLevel;
+	mes .@name$;
+	mes "Would you like to be a Baby Hunter, or a Bard/Dancer?";
+	next;
+	menu "Hunter",L_Hun,"Bard/Dancer",L_BardDeceiph;
+
+L_Hun:
+	mes .@name$;
+	savepoint "prontera", 159, 179;
+	mes "Excellent " +strcharinfo(0)+ ", you're now a Baby Hunter!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4034;
+	close;
+
+L_BardDeceiph:
+	if (Sex == 1) goto L_Bard;
+	savepoint "prontera", 159, 179;
+	mes .@name$;
+	mes "Excellent " +strcharinfo(0)+ ", you're now a Baby Dancer!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4043;
+	close;
+
+L_Bard:
+	mes .@name$;
+	savepoint "prontera", 159, 179;
+	mes "Excellent " +strcharinfo(0)+ ", you're now a Baby Bard!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4042;
+	close;
+
+L_BabyAcoChoice:
+	if (JobLevel < 40) goto L_JobLevel;
+	mes .@name$;
+	mes "Would you like to be an Baby Priest, or a Monk?";
+	next;
+	menu "Priest",L_Priest,"Monk",L_Monk;
+
+L_Priest:
+	mes .@name$;
+	savepoint "prontera", 159, 179;	
+	mes "Excellent " +strcharinfo(0)+ ", you're now a Baby Priest!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4031;
+	close;
+
+L_Monk:
+	mes .@name$;
+	savepoint "prontera", 159, 179;
+	mes "Excellent " +strcharinfo(0)+ ", you're now a Baby Monk!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4038;
+	close;
+
+L_BabyMerchChoice:
+	if (JobLevel < 40) goto L_JobLevel;
+	mes .@name$;
+	mes "Would you like to be a Baby Blacksmith, or a Alchemist werden?";
+	next;
+	menu "Blacksmith",L_Blacksmith,"Alchemist",L_Alch;
+
+L_Blacksmith:
+	mes .@name$;
+	savepoint "prontera", 159, 179;
+	mes "Excellent " +strcharinfo(0)+ ", you're now a Baby Blacksmith!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4033;
+	close;
+
+L_Alch:
+	mes .@name$;
+	savepoint "prontera", 159, 179;
+	mes "Excellent " +strcharinfo(0)+ ", you're now a Baby Alchemist!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4041;
+	close;
+
+
+L_BabySinStalk:
+	if (JobLevel < 40) goto L_JobLevel;
+	mes .@name$;
+	mes "Would you like to be a Baby Assassin, or a Rogue?";
+	next;
+	menu "Assassin",L_sin,"Rogue",L_rogue;
+
+L_sin:
+	mes .@name$;
+	savepoint "prontera", 159, 179;
+	mes "Excellent " +strcharinfo(0)+ ", you're now a Baby Assassin!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4035;
+	close;
+
+L_rogue:
+	mes .@name$;
+	savepoint "prontera", 159, 179;
+	mes "Excellent " +strcharinfo(0)+ ", you're now a Baby Rogue!";
+	set JobLevel, 1;
+	set SkillPoint, 0;
+	jobchange 4040;
+	close;
+
+	
+L_Cancel:
+	mes .@name$;
+	mes "Ok, bye.";
+	close;
+	
+L_Cant:
+	mes .@name$;
+	mes "Sorry, but O can't do anything for you!";
+	close;
+	
+L_SkillPoints:
+	mes .@name$;
+	mes "Please set all your Skillpoints and then come back to me!";
+	close;
+	
+L_StatusPoints:
+	mes .@name$;
+	mes "Please set all your Statuspoints and then come back to me!";
+	close;
+	
+L_JobLevel:
+	mes .@name$;
+	mes "Sorry, but your Job Lvl. is to low to change.";
+	close;
+	
+L_BaseLevel:
+	mes .@name$;
+	mes "Sorry but your Base / Job Level is to low to change.";
+	close;
+	
+}

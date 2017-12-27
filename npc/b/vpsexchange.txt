@@ -1,0 +1,55 @@
+prt_in,45,99,3	script	Points Exchanger	113,{
+
+if( Weight >= ( MaxWeight / 2 ) ){
+	mes "^FF0000You are overweight!^000000";
+	close;
+}
+
+mes "[ Exchanger ]";
+mes "You have";
+mes "VPS Points: ^19726D"+#CASHPOINTS+"^000000";
+next;
+mes "[ Exchanger ]";
+mes "I can change your ^951831Vote Points^000000 into ^279518Voting Proof Ticket^000000.";
+next;
+mes "[ Exchanger ]";
+mes "Do you want to exchange?";
+menu "Yes",Lvps,"Nothing",-;
+next;
+mes "[ Exchanger ]";
+mes "Go back when you've changed your mind";
+close;
+
+Lvps:	
+	if ( #CASHPOINTS == 0 ){
+	next;
+	mes "[ Exchanger ]";
+	mes "You don't have VPS points";
+	close;
+	} else if ( #CASHPOINTS >= 0 ){
+	next;
+	mes "[ Exchanger ]";
+	mes "Your VPS Points: ^19726D"+#CASHPOINTS+"^000000";
+	mes "How many VPS Points do you want to exchange?";
+	mes "But take note, I can only exchange ^19726D100 points^000000 per session.";
+	input .@exchangepoints;
+	if ( .@exchangepoints >= 101 ){
+	next;
+	mes "[ Exchanger ]";
+	mes "Sorry but I can only change 100 points at a time";
+	close;
+	} else if ( .@exchangepoints <= #CASHPOINTS ){
+	next;
+	set #CASHPOINTS,#CASHPOINTS-.@exchangepoints;
+	getitem 7227,.@exchangepoints;
+	mes "[ Exchanger ]";
+	mes "Thank you. Come back again.";
+	close;
+	} else {
+	next;
+	mes "[ Exchanger ]";
+	mes "Sorry but you don't have enough vps points";
+	close;
+	}
+	}
+}

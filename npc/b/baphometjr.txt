@@ -1,0 +1,11 @@
+-	script	ejay	-1,{
+OnInit:
+monster "prt_maze03",0,0,"--ja--",1101,400,strnpcinfo(0)+"::OnMobKill";
+end;
+
+OnMobKill:
+sleep 5000;
+monster "prt_maze03",0,0,"--ja--",1101,1,strnpcinfo(0)+"::OnMobKill";
+end;
+
+}

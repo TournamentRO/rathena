@@ -1,0 +1,16 @@
+-	script	atcmd_quest	-1,{
+OnInit:
+	bindatcmd("quest","atcmd_quest::OnAtcommand",0,99);
+	end;
+
+OnAtcommand:
+	if( getmapflag(strcharinfo(3),mf_noteleport) || getmapflag(strcharinfo(3),mf_noteleport) ) {
+		message strcharinfo(0),"@quest failed.";
+		end;
+	}
+	if( .@atcmd_numparameters > 0 )
+ 		unittalk 0, "@quest " +implode(.@atcmd_parameters$, " ");
+ 	else
+ 		warp "lhz_in03",261,260;
+ 	end;	
+}

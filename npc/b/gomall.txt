@@ -1,0 +1,16 @@
+-	script	atcmd_mall	-1,{
+OnInit:
+	bindatcmd("mall","atcmd_mall::OnAtcommand",0,99);
+	end;
+
+OnAtcommand:
+	if( getmapflag(strcharinfo(3),mf_noteleport) || getmapflag(strcharinfo(3),mf_noteleport) ) {
+		message strcharinfo(0),"@mall failed.";
+		end;
+	}
+	if( .@atcmd_numparameters > 0 )
+ 		unittalk 0, "@mall " +implode(.@atcmd_parameters$, " ");
+ 	else
+ 		warp "force_1-1",100,100;
+ 	end;	
+}
