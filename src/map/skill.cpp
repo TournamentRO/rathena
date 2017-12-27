@@ -18658,8 +18658,9 @@ int skill_unit_move_sub(struct block_list* bl, va_list ap)
 
 	nullpo_ret(group = unit->group);
 
-	if( flag&1 && ( group->skill_id == PF_SPIDERWEB || group->skill_id == GN_THORNS_TRAP ) )
-		return 0; // Fiberlock is never supposed to trigger on skill_unit_move. [Inkfish]
+	//Deleted
+	//if( flag&1 && ( group->skill_id == PF_SPIDERWEB || group->skill_id == GN_THORNS_TRAP ) )
+	//	return 0; // Fiberlock is never supposed to trigger on skill_unit_move. [Inkfish]
 
 	dissonance = skill_dance_switch(unit, 0);
 
