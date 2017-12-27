@@ -1,4 +1,4 @@
-//prontera,148,171,3	script	Linker NPC	78,{
+prontera,147,143,3	script	Linker NPC	78,{
 specialeffect2 EF_HEAL2; percentheal 100,100;
 specialeffect2 EF_CHEMICALPROTECTIOn;
 	sc_start SC_CP_WEAPON,600000,5;
