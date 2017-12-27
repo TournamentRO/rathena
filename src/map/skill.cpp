@@ -11397,8 +11397,8 @@ int skill_castend_id(int tid, unsigned int tick, int id, intptr_t data)
 				ud->skill_id != WZ_WATERBALL)
 				sc->data[SC_SPIRIT]->val3 = 0; //Clear bounced spell check.
 
-			if( sc->data[SC_DANCING] && skill_get_inf2(ud->skill_id)&INF2_SONG_DANCE && sd )
-				skill_blockpc_start(sd,BD_ADAPTATION,3000);
+			//if( sc->data[SC_DANCING] && skill_get_inf2(ud->skill_id)&INF2_SONG_DANCE && sd )
+			//	skill_blockpc_start(sd,BD_ADAPTATION,3000);
 		}
 
 		if (sd && ud->skill_id != SA_ABRACADABRA && ud->skill_id != WM_RANDOMIZESPELL) // they just set the data so leave it as it is.[Inkfish]
@@ -13642,7 +13642,6 @@ int skill_unit_onplace_timer(struct skill_unit *unit, struct block_list *bl, uns
 			case UNT_FIREPILLAR_ACTIVE:
 			case UNT_ELECTRICSHOCKER:
 			case UNT_MANHOLE:
-			case UNT_SPIDERWEB:
 				return 0;
 			default:
 				ShowError("skill_unit_onplace_timer: interval error (unit id %x)\n", sg->unit_id);
@@ -13816,23 +13815,6 @@ int skill_unit_onplace_timer(struct skill_unit *unit, struct block_list *bl, uns
 				sg->limit=DIFF_TICK(tick,sg->tick)+1500;
 				//Target will be stopped for 3 seconds
 				sc_start(ss,bl,SC_STOP,100,0,skill_get_time2(sg->skill_id,sg->skill_lv));
-			}
-			break;
-		case UNT_SPIDERWEB:
-			if (sg->val2 == 0 && tsc) {
-				int sec = skill_get_time2(sg->skill_id, sg->skill_lv);
-				if (status_change_start(ss, bl, type, 10000, sg->skill_lv, sg->group_id, 0, 0, sec, tick)) {
-					const struct TimerData* td = tsc->data[type] ? get_timer(tsc->data[type]->timer) : NULL;
-					if (td)
-						sec = DIFF_TICK(td->tick, tick);
-					unit_movepos(bl, unit->bl.x, unit->bl.y, 0, 0);
-					clif_fixpos(bl);
-					sg->val2 = bl->id;
-				}
-				else
-					sg->limit = DIFF_TICK(tick, sg->tick) + sec;
-				sg->interval = -1;
-				unit->range = 0;
 			}
 			break;
 		case UNT_ANKLESNARE:
@@ -17949,7 +17931,6 @@ int skill_delunit(struct skill_unit* unit)
 	switch (group->skill_id) {
 		case HT_ANKLESNARE:
 		case SC_ESCAPE:
-		case PF_SPIDERWEB:
 			{
 				struct block_list* target = map_id2bl(group->val2);
 				enum sc_type type = status_skill2sc(group->skill_id);
