@@ -496,8 +496,7 @@ int64 battle_attr_fix(struct block_list *src, struct block_list *target, int64 d
 					//Double damage
 					damage *= 2;
 					//Remove a unit group or end whole status change
-					//MADE WEB PERSIST AFTER GETTING DAMAGE
-					//status_change_end(target, SC_SPIDERWEB, INVALID_TIMER);
+					status_change_end(target, SC_SPIDERWEB, INVALID_TIMER);
 				}
 				if (tsc->data[SC_THORNSTRAP] && battle_getcurrentskill(src) != GN_CARTCANNON)
 					status_change_end(target, SC_THORNSTRAP, INVALID_TIMER);
