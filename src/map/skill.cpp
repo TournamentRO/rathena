@@ -18544,12 +18544,6 @@ static int skill_unit_timer_sub(DBKey key, DBData *data, va_list ap)
 					}
 				}
 				break;
-			case UNT_SPIDERWEB:
-				if (unit->val1 <= 0) {
-					if (group->unit_id == UNT_SPIDERWEB && group->val2 > 0)
-						skill_delunit(unit);
-				}
-				break;
 			case UNT_REVERBERATION:
 			case UNT_NETHERWORLD:
 				if (unit->val1 <= 0) {
@@ -18663,9 +18657,8 @@ int skill_unit_move_sub(struct block_list* bl, va_list ap)
 
 	nullpo_ret(group = unit->group);
 
-	//Deleted
-	//if( flag&1 && ( group->skill_id == PF_SPIDERWEB || group->skill_id == GN_THORNS_TRAP ) )
-	//	return 0; // Fiberlock is never supposed to trigger on skill_unit_move. [Inkfish]
+	if( flag&1 && ( group->skill_id == PF_SPIDERWEB || group->skill_id == GN_THORNS_TRAP ) )
+		return 0; // Fiberlock is never supposed to trigger on skill_unit_move. [Inkfish]
 
 	dissonance = skill_dance_switch(unit, 0);
 
