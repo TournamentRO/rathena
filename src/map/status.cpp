@@ -3000,8 +3000,11 @@ static int status_get_hpbonus(struct block_list *bl, enum e_status_bonus type) {
 				bonus += 30;
 			if(sc->data[SC_CROSSBOWCLAN])
 				bonus += 30;
-			//Bonus Effect for Wizard & Sage Link 
-			if (sc->data[SC_SPIRIT] && (sc->data[SC_SPIRIT]->val2 == SL_WIZARD || sc->data[SC_SPIRIT]->val2 == SL_SAGE))
+			//if (sc->data[SC_SPIRIT] && (sc->data[SC_SPIRIT]->val2 == SL_WIZARD || sc->data[SC_SPIRIT]->val2 == SL_SAGE))
+			//SOUL LINK TO WIZ&SAGE GIVES MAXHP += BASELEVEL * 200
+			if (sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_SAGE)
+				bonus += ((TBL_PC*)bl)->status.base_level * 200;
+			if (sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_WIZARD)
 				bonus += ((TBL_PC*)bl)->status.base_level * 200;
 		}
 	} else if (type == STATUS_BONUS_RATE) {
@@ -5586,8 +5589,11 @@ static unsigned short status_calc_vit(struct block_list *bl, struct status_chang
 		vit -= sc->data[SC_STOMACHACHE]->val1;
 	if(sc->data[SC_KYOUGAKU])
 		vit -= sc->data[SC_KYOUGAKU]->val2;
-	//GIVE SAGE ADDITIONAL VIT BASED ON INT WHEN LINKED
-	if (sc->data[SC_SPIRIT] && (sc->data[SC_SPIRIT]->val2 == SL_WIZARD || sc->data[SC_SPIRIT]->val2 == SL_SAGE))
+	//GIVE SAGE ADDITIONAL VIT BASED ON INT WHEN LINKED SEPARATED CHECKS
+	//if (sc->data[SC_SPIRIT] && (sc->data[SC_SPIRIT]->val2 == SL_WIZARD || sc->data[SC_SPIRIT]->val2 == SL_SAGE))
+	if (sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_WIZARD)
+		vit += ((TBL_PC*)bl)->status.int_ / 5;
+	if (sc->data[SC_SPIRIT] && sc->data[SC_SPIRIT]->val2 == SL_SAGE)
 		vit += ((TBL_PC*)bl)->status.int_ / 5;
 	if(sc->data[SC_SWORDCLAN])
 		vit += 1;
