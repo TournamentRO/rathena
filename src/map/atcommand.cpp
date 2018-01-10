@@ -472,8 +472,8 @@ ACMD_FUNC(mapmove)
 	if (mapindex)
 		m = map_mapindex2mapid(mapindex);
 
-	if (!pc_get_group_level(sd) && DIFF_TICK(gettick(), sd->canlog_tick) < 10000) {
-		int w_tick = 10 - (DIFF_TICK(gettick() + 500, sd->canlog_tick) / 1000); //+500 (0.5s) will make it roundup if needed be, lighta
+	if (!pc_get_group_level(sd) && DIFF_TICK(gettick(), sd->warpgodelay_tick) < 10000) {
+		int w_tick = 10 - (DIFF_TICK(gettick() + 500, sd->warpgodelay_tick) / 1000); //+500 (0.5s) will make it roundup if needed be, lighta
 		sprintf(atcmd_output, msg_txt(sd, 1505), w_tick); //Please wait %d seconds before warping.
 		clif_displaymessage(fd, atcmd_output);
 		return 0;
@@ -1957,8 +1957,8 @@ ACMD_FUNC(go)
 		clif_displaymessage(fd, msg_txt(sd, 664)); // You cannot use this command when dead.
 		return 0;
 	}
-	if (!pc_get_group_level(sd) && DIFF_TICK(gettick(), sd->canlog_tick) < 10000) {
-		int w_tick = 10 - (DIFF_TICK(gettick() + 500, sd->canlog_tick) / 1000); //+500 (0.5s) will make it roundup if needed be, ligtha
+	if (!pc_get_group_level(sd) && DIFF_TICK(gettick(), sd->warpgodelay_tick) < 10000) {
+		int w_tick = 10 - (DIFF_TICK(gettick() + 500, sd->warpgodelay_tick) / 1000); //+500 (0.5s) will make it roundup if needed be, ligtha
 		sprintf(atcmd_output, msg_txt(sd, 1505), w_tick); //Please wait %d seconds before warping.
 		clif_displaymessage(fd,atcmd_output);
 		return 0;

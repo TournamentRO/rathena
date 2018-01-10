@@ -69,8 +69,7 @@
 2369:2428:2533:5306,{ bonus2 bSubRace,RC_DemiHuman,10; bonus2 bSubRace,RC_Player,10; bonus bMaxHPrate,20; bonus2 bResEff,Eff_Freeze,10000; skill "WZ_FROSTNOVA",10; }
 2371:2522,{ bonus bAgi,5; bonus bFlee,10; }
 2371:2523,{ bonus bAgi,5; bonus bFlee,10; }
-2374:2729,{ bonus2 bAddClass,Class_All,3; bonus bMatkRate,3; }
-2375:2729,{ bonus2 bAddClass,Class_All,3; bonus bMatkRate,3; }
+2375:2374:2433,{ bonus2 bSubEle,Ele_All,15; bonus2 bAddEle,Ele_Neutral,15; }
 2376:2435:2538,{ bonus2 bSubRace,RC_All,-300; bonus2 bSubRace,RC_DemiHuman,300; bonus2 bSubRace,RC_Player,300; bonus bVit,3; bonus bMaxHPRate,12; bonus bHealpower2,10; bonus bAddItemHealRate,10; autobonus2 "{ bonus2 bHPRegenRate,600,1000; }",5,10000,BF_WEAPON,"{ specialeffect2 EF_HEAL; }"; }
 2377:2435:2538,{ bonus2 bSubRace,RC_All,-300; bonus2 bSubRace,RC_DemiHuman,300; bonus2 bSubRace,RC_Player,300; bonus bStr,3; bonus bMaxHPRate,12; bonus2 bSkillAtk,"MC_MAMMONITE",20; bonus2 bSkillHeal,"AM_POTIONPITCHER",10; bonus2 bSkillHeal2,"AM_POTIONPITCHER",10; bonus2 bSkillHeal2,"AL_HEAL",10; bonus bUnbreakableArmor,0; }
 2378:2435:2538,{ bonus2 bSubRace,RC_All,-300; bonus2 bSubRace,RC_DemiHuman,300; bonus2 bSubRace,RC_Player,300; bonus bAgi,3; bonus bMaxHPRate,12; bonus bCritical,5; bonus bAspdRate,5; autobonus "{ bonus2 bHPRegenRate,300,1000; }",10,10000,BF_WEAPON,"{ specialeffect2 EF_HEAL; }"; }
@@ -165,3 +164,13 @@
 //5470:5653,{ bonus bDex,1; bonus bLongAtkRate,3; }
 13034:13035,{ bonus bMaxSP,20; bonus bMaxHPRate,5; bonus bHit,10; bonus2 bAddSize,Size_Large,30; autobonus "{ bonus bAspdRate,100; }",1,7000,BF_WEAPON,"{ specialeffect2 EF_POTION_BERSERK; }"; }
 18507:18539,{ bonus bUseSPrate,-3; }
+
+//Customs
+//icarus staff,icarus bow, icarus sword
+1634:32027,{ bonus bAspdRate,30; bonus5 bAutoSpell,"MG_COLDBOLT",10,20,ATF_MAGIC,1; }
+1720:32027,{ skill "AL_INCAGI",10; bonus bDoubleAddRate,20; }
+1137:32027,{ skill "MO_FINGEROFFENSIVE",5; bonus3 bAutoSpell,"SM_BASH",1,20; bonus5 bAutoSpell,"SM_BASH",1,20,BF_WEAPON,1; }
+//Skewer + Torn Wings
+1221:32029,{ bonus bCriticalRate,20; bonus bCritAtkRate,10; bonus bFlee2,2; }
+1221:1221:32029,{ bonus bCriticalRate,40; bonus bCritAtkRate,20; bonus bFlee2,4; }
+32132:32133,{ bonus bDex,3; skill "TK_SEVENWIND",4; }

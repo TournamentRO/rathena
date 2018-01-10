@@ -1210,6 +1210,7 @@ bool pc_authok(struct map_session_data *sd, uint32 login_id2, time_t expiration_
 	sd->canskill_tick = tick;
 	sd->cansendmail_tick = tick;
 	sd->idletime = last_tick;
+	sd->warpgodelay_tick = tick;
 
 	for(i = 0; i < MAX_SPIRITBALL; i++)
 		sd->spirit_timer[i] = INVALID_TIMER;
@@ -7638,9 +7639,10 @@ void pc_damage(struct map_session_data *sd,struct block_list *src,unsigned int h
 	if(battle_config.prevent_logout_trigger&PLT_DAMAGE)
 		sd->canlog_tick = gettick();
 	
+	//Only invoke when target and dmge source is pc
 	if (src->type == BL_PC) {
-		((TBL_PC*)src)->canlog_tick = gettick();
-		sd->canlog_tick = gettick();
+		((TBL_PC*)src)->warpgodelay_tick = gettick();
+		sd->warpgodelay_tick = gettick();
 	}
 }
 

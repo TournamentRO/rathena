@@ -8014,8 +8014,10 @@ int status_get_sc_def(struct block_list *src, struct block_list *bl, enum sc_typ
 				return 0;
 			sc_def = status->luk*100;
 			sc_def2 = status->luk*10 - status_get_lv(src)*10; // Curse only has a level penalty and no resistance
-			tick_def = status->vit*100;
-			tick_def2 = status->luk*10;
+			tick_def = 0;
+			//Disabled tick def for curse
+			//tick_def = status->vit*100;
+			//tick_def2 = status->luk*10;
 			break;
 		case SC_BLIND:
 			sc_def = (status->vit + status->int_)*50;
