@@ -28,7 +28,7 @@
 #	  Table: "<storage_table>"  // (string) Name of table where storage is saved. The table stucture is the same as the default storage table.
 #	  Max: <max_amount>         // (int) *optional* Maximum number of items in storage. MAX_STORAGE will be used if no value is defined.
 
-#Storages:
-#    - ID: 0
-#      Name: "Storage"
-#      Table: "storage"
+Storages:
+    - ID: 0
+      Name: "Storage"
+      Table: "storage"
