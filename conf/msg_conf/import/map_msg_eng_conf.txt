@@ -1,0 +1,1 @@
+1505: Please wait %d seconds before warping.
