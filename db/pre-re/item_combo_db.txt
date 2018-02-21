@@ -179,3 +179,10 @@
 32132:32133,{ bonus bDex,3; skill "TK_SEVENWIND",4; }
 32021:32018,{ bonus bMaxHPrate,5; skill "TF_HIDING",1; }
 32134:32031,{ bonus bStr,3; skill "TK_SEVENWIND",4; }
+//Ring of Diablo,Diablo Helm, Diablo Shield
+32105:5808:2537,{ skill "TK_SEVENWIND",4; bonus bDex,3; bonus bStr,3; bonus2 bComaRace,RC_Player,100; }
+//2 Vengeful Glad protection
+13451:13451,{ bonus bAtk,-999; }
+//Black lighthalzen & Valkyrie helms
+32163:32133,{ skill "TK_SEVENWIND",5; }
+32163:32134,{ skill "TK_SEVENWIND",5; }

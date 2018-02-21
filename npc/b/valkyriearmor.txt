@@ -6,14 +6,14 @@ prt_in,39,95,2	script	Break The Seal	811,{
 if(dar_dar >= 1) goto L_taposme;
 if(hen_hen >= 1) goto L_taposna;
 if(hen_hen < 1)
-	mes "[Henry]";
+	mes "[ Willem ]";
 	mes "Break the seal quest!!";
 	mes "I am the man you talk to if you want";
 	mes "to break the seal";
 	mes "and recieve my hard-earned castle drops";
 	mes "so are you up to it??";
 	next;
-	mes "[Henry]";
+	mes "[ Willem ]";
 	mes "These are what i need";
 	mes "Ancient Lips - 100";
 	mes "Peridots - 25";
@@ -29,7 +29,7 @@ if(hen_hen < 1)
 	menu "Yes!!!.",-, "Nope",L_later;
 		
 		
-	mes "[Henry]";
+	mes "[ Willem ]";
 	mes "Are the items ready? let me check.";
 	next;
 	if(countitem(1054) < 100 || countitem(7289) < 25 || countitem(7297) < 15 || countitem(7018) < 10 ||countitem(7020) < 10 ||countitem(7035) < 15 || countitem(1009) < 200 || countitem(7442) < 100) goto L_later2;
@@ -43,7 +43,7 @@ if(hen_hen < 1)
 	delitem 1009,200;
 	delitem 7442,100;
 	
-	mes "[Henry]";
+	mes "[ Willem ]";
 	mes "So thank you for the help";
 	mes "you have broken the seal.";
 	set hen_hen,1;
@@ -72,7 +72,7 @@ if(hen_hen < 1)
 	
 	getitem .@item,1;
 
-	mes "[Henry]";
+	mes "[ Willem ]";
 	mes "Ah, you have out done your self!!";
 	mes "Thank you for your help";
 	mes "Now start your journey to find";
@@ -83,23 +83,23 @@ if(hen_hen < 1)
 	end;
 
 L_taposna:
-mes "[Henry]";	
+mes "[ Willem ]";	
 mes "Go out and search the fields of payon the fields of geffen and the towns of lighthalzen and comodo for the valkyrie equips";
 close;
 
 L_taposme:
-mes "[ Henry ]";	
+mes "[ Willem ]";	
 mes "You have already done this quest and there is no point in doing it again";		
 close;
 
 L_later:
-mes "[Henry]";
+mes "[Willem]";
 mes "Well to bad";
 mes "just come back when your ready";
 close;
 
 L_later2:
-mes "[Henry]";
+mes "[ Willem ]";
 mes "*piff*";
 mes "You lack some items";
 mes "Come back when your really done";
@@ -115,24 +115,24 @@ if(rus_rus >= 1) goto L_tapospopo;
 if(hen_hen >= 1) goto continueq;	
 if(hen_hen < 1)	
 {
-mes "^ff0000[Swain]^000000";	
+mes "^ff0000[ Dwayne ]^000000";	
 mes "Are you the delivery boy of pizza hut?";	
 mes "If not go way i don't need you";	
 close;	
 }	
 continueq:
 			
-mes "^ff0000[Swain]^000000";	
+mes "^ff0000[ Dwayne ]^000000";	
 mes "Oh my grasya santisimo!!";	
-mes "You have spoken to uncle henry!";	
+mes "You have spoken to uncle Willem!";	
 next;
-mes "^ff0000[Swain]^000000";	
+mes "^ff0000[ Dwayne ]^000000";	
 mes "By the way I am Swain of Payon the crafter of the valkyrie armor";
 mes "would you like to have one?";
 menu "Yes",-,"No",L_ayaw;		
 next;	
 
-mes "^ff0000[Swain]^000000";
+mes "^ff0000[ Dwayne ]^000000";
 mes "This great armor is very complicated, it needs very rare materials to craft it if you really want it go get me these";	
 next;	
 mes "- ^ff0000100 Three-Headed Dragon's head^000000";	
@@ -140,7 +140,7 @@ mes "- ^ff00007 Emblem of Sun God^000000";
 mes "- ^ff00001 Chain Mail[1]^000000";		
 mes "- ^ff0000100 Treasure Box^000000";	
 next;	
-mes "^ff0000[Swain]^000000";	
+mes "^ff0000[ Dwayne ]^000000";	
 mes "I'll be waiting for you chosen one!";	
 if(countitem(7443) < 100 || countitem(7086) < 7 || countitem(7444) < 100 || countitem(2315) < 1) goto koolang;
 if(countitem(7443) >= 100 || countitem(7086) >= 7 || countitem(7444) >= 100 || countitem(2315) >= 1) goto kontinueq;
@@ -148,7 +148,7 @@ close;
 
 L_ayaw:		
 	
-mes "^ff0000[Swain]^000000";	
+mes "^ff0000[ Dwayne ]^000000";	
 mes "Wacha Wachi Wacho... go shoooo";
 mes "Just speak to me if you want it already";
 close;	
@@ -156,13 +156,13 @@ close;
 	
 koolang:	
 next;	
-mes "^ff0000[Swain]^000000";	
+mes "^ff0000[ Dwayne ]^000000";	
 mes "As i said one missing material and all the others go to waste";	
 close;	
 
 kontinueq:	
 next;
-mes "^ff0000[Swain]^000000";	
+mes "^ff0000[ Dwayne ]^000000";	
 mes "Very well done my friend you have finished the valkyrie armor quest";		
 delitem 7443,100;	
 delitem 7086,7;	
@@ -172,7 +172,7 @@ next;
 getitem 2357,1;
 set rus_rus,1;
 next;	
-mes "^ff0000[Swain]^000000";	
+mes "^ff0000[ Dwayne ]^000000";	
 mes "Good job sir, enjoy your new armor";		
 mes "Now you should seek my brothers and cousins and finish the quest";
 mes "And when you gain the valkyrie set speak to Daryl";
@@ -182,18 +182,18 @@ announce "Wews! "+strcharinfo(0)+" has just created the Valkyrie Armor.",8;
 close;	
 
 L_tapospopo:	
-mes "^ff0000[Swain]^000000";	
+mes "^ff0000[ Dwayne ]^000000";	
 mes "As i said complete the valkyrie quest";		
 mes "And then speak to Daryl";	
 close;
 
 L_udone:
-mes "^ff0000[Swain]^000000";	
+mes "^ff0000[ Dwayne ]^000000";	
 mes "This quest, once done no more repeating";		
 close;
 }	
 	
-gef_fild07.gat,185,249,5	script	Fabelhaft	899,{
+gef_fild07.gat,185,249,5	script	Flammenwerfer	899,{
 
 if(dar_dar >=1) goto L_bulmadone;
 
@@ -202,22 +202,22 @@ if(jmz_bit >=1) goto L_bulmatapos;
 if(hen_hen >=1) goto B_ulma;	
 if(hen_hen < 1)
 {
-mes "^ff0000[Fabelhaft]^000000";	
+mes "^ff0000[ Flammenwerfer ]^000000";	
 mes "I am sight seeing don't disturb me";	
 mes "go far far away from me!!";
 close;
 }	
 B_ulma:	
 
-mes "^ff0000[Fabelhaft]^000000";	
+mes "^ff0000[ Flammenwerfer ]^000000";	
 mes "Oh, you know my uncle";	
-mes "Nice to meet you I'm Fabelhaft";	
+mes "Nice to meet you I'm Flammenwerfer";	
 mes "I craft the valkyrie shield";
 mes "Would you like me to craft the said shield?";
 menu "Okay",-,"Nope",M_ofo;	
 next;	
 	
-mes "^ff0000[Fabelhaft]^000000";	
+mes "^ff0000[ Flammenwerfer ]^000000";	
 mes "The valkyrie shield is a very difficult item to craft the materials are rare. Well if your sure you want to make it";
 mes "these are the items i need.";	
 next;
@@ -232,19 +232,19 @@ close;
 	
 M_ofo:	
 	
-mes "^ff0000[Fabelhaft]^000000";	
+mes "^ff0000[ Flammenwerfer ]^000000";	
 mes "Okay, Talk to me later.";
 close;
 
 K_ulangot:	
 	
-mes "^ff0000[Fabelhaft]^000000";	
+mes "^ff0000[ Flammenwerfer ]^000000";	
 mes "You don't have the items";	
 close;	
 	
 K_umpleto:	
 	
-mes "^ff0000[Fabelhaft]^000000";	
+mes "^ff0000[ Flammenwerfer ]^000000";	
 mes "Wow, thanks!";	
 delitem 7451,50;	
 delitem 7090,7;
@@ -252,7 +252,7 @@ delitem 2104,1;
 delitem 7444,100;
 getitem 2115,1;
 next;
-mes "^ff0000[Fabelhaft]^000000";	
+mes "^ff0000[ Flammenwerfer ]^000000";	
 mes "Nicely done enjoy the shield";		
 mes "Continue searching for my friends";
 mes "And when you gain the valkyrie set speak to Daryl";
@@ -264,33 +264,33 @@ close;
 
 	
 L_bulmatapos:	
-mes "^ff0000[Fabelhaft]^000000";
+mes "^ff0000[ Flammenwerfer ]^000000";
 mes "Complete the valkyrie quest and speak to Daryl";	
 close;	
 
 L_bulmadone:
-mes "^ff0000[Fabelhaft]^000000";
+mes "^ff0000[ Flammenwerfer ]^000000";
 mes "Dude, you can only do this quest once";	
 close;		
 }	
 	
-lighthalzen.gat,189,297,5	script	Chupaeng	904,{	
+lighthalzen.gat,189,297,5	script	Chaze	904,{	
 	
 if(dar_dar >=1) goto L_chichix;
 if(tonton >=1) goto L_chichi;
 if(hen_hen >= 1) goto tsitsi;	
 if(hen_hen < 1)	
 {
-mes "^ff0000[Chupaeng]^000000";
+mes "^ff0000[ Chaze ]^000000";
 mes "I miss Donna";	
 mes "I wish i could see her again";
 close;	
 	}
 tsitsi: 	
 
-mes "^ff0000[Chupaeng]^000000";	
-mes "You have spoken to my great uncle Henry";	
-mes "I am Chupaeng the crafter of the Valkyrie Shoes";	
+mes "^ff0000[ Chaze ]^000000";	
+mes "You have spoken to my great uncle Willem";	
+mes "I am Chaze the crafter of the Valkyrie Shoes";	
 mes "Would you like me to craft you the shoes?";
 next;	
 menu "Sure",-,"Maybe Later",L_basho;	
@@ -298,7 +298,7 @@ next;
 	
 		
 	
-mes "^ff0000[Chupaeng]^000000";	
+mes "^ff0000[ Chaze ]^000000";	
 mes "The shoe is quite brittle";
 mes "So it need some hard to find items to make";
 mes "Here are the requirements";	
@@ -310,24 +310,24 @@ mes "- ^ff0000100 Treasure Box^000000";
 next;	
 if(countitem(7450) < 20 || countitem(7091) < 7 || countitem(7444) < 100 || countitem(2406) < 1) goto M_wala;
 if(countitem(7450) >= 20 || countitem(7091) >= 7 || countitem(7444) >= 100 || countitem(2406) >= 1) goto M_eron;	
-mes "^ff0000[Chupaeng]^000000";		
+mes "^ff0000[ Chaze ]^000000";		
 mes "Hurry up i have something to do";	
 close;	
 L_basho:	
 	
-mes "^ff0000[Chupaeng]^000000";
+mes "^ff0000[ Chaze ]^000000";
 mes "Talk to me when you want it already.";		
 close;
 	
 M_wala:
 	
-mes "^ff0000[Chupaeng]^000000";	
+mes "^ff0000[ Chaze ]^000000";	
 mes "You lack some few items.";	
 close;	
 	
 M_eron:	
 	
-mes "^ff0000[Chupaeng]^000000";
+mes "^ff0000[ Chaze ]^000000";
 mes "Oh thank you!";	
 delitem 7450,20;	
 delitem 7091,7;	
@@ -336,7 +336,7 @@ delitem 7444,100;
 getitem 2421,1;
 set tonton,1;	
 next;	
-mes "^ff0000[Chupaeng]^000000";
+mes "^ff0000[ Chaze ]^000000";
 mes "Good one dude Enjoy the shoes";		
 mes "continue the holy valkyrie quest";
 mes "and when you gain the valkyrie set speak to Daryl";
@@ -345,13 +345,13 @@ announce "Wews! "+strcharinfo(0)+" has just created the Valkyrie Shoes.",8;
 close;	
 	
 L_chichi:	
-mes "^ff0000[Chupaeng]^000000";
+mes "^ff0000[ Chaze ]^000000";
 mes "Search my cousins and after that";
 mes "Find Daryl!";	
 close;	
 	
 L_chichix:	
-mes "^ff0000[Chupaeng]^000000";
+mes "^ff0000[ Chaze ]^000000";
 mes "Nice to meet you again brave warrior, how is life treating you with your new (GODLY!) equips!";	
 close;	
 }	
@@ -372,7 +372,7 @@ M_buten:
 	
 
 mes "^ff0000[Sky]^000000";	
-mes "You know my uncle henry?? wow this is great!!";	
+mes "You know my uncle Willem?? wow this is great!!";	
 mes "I can make the Valkyrie Manteau!";	
 mes "Do you want one??";	
 menu "Yeye",-,"No thanks",karpenter;	
@@ -434,15 +434,15 @@ mes "Wow, your one of the Mega-Warrior. How is life treating you my friend?";
 close;
 }
 	
-valkyrie.gat,49,49,5	script	Justin	733,{
+valkyrie.gat,49,49,5	script	Adrian	733,{
 
-mes "^ff0000[Justin]^000000";
-mes "Hello there my friend I am Justin";
+mes "^ff0000[Adrian]^000000";
+mes "Hello there my friend I am Adrian";
 next;
 if(dar_dar >= 1) goto L_kalbo;
 if(countitem(2524) < 1 || countitem(2421) < 1 || countitem(2357) < 1 || countitem(2115) < 1) goto daryl;
 
-mes "^ff0000[Justin]^000000";
+mes "^ff0000[Adrian]^000000";
 mes "Good you have the valkyrie set if you must know i am the crafter of the Sleipnir";
 next;
 
@@ -450,16 +450,16 @@ if(tan_tan >= 1) goto darylquest;
 if(tan_tan < 1) goto daryl;	
 
 darylquest:
-mes "^ff0000[Justin]^000000";	
+mes "^ff0000[Adrian]^000000";	
 mes "I see you really have spoken to my brothers.";	
 mes "Very well then!";	
 next;
-mes "^ff0000[Justin]^000000";	
-mes "By the way I am Justin of the valkyries and you already know what i make,";
+mes "^ff0000[Adrian]^000000";	
+mes "By the way I am Adrian of the valkyries and you already know what i make,";
 mes "Do you desire the Sleipnir?";
 menu "Yes",-,"No",L_nono;		
 next;	
-mes "^ff0000[Justin]^000000";
+mes "^ff0000[Adrian]^000000";
 mes "The great sleipnir named after Odin's trusty";
 mes "steed, is the most powerful shoe in the land";
 mes "Gather these things so i may craft it";		
@@ -469,7 +469,7 @@ mes "- ^ff00009 Emblem of Sun God^000000";
 mes "- ^ff000010 Matchstick^000000";		
 mes "- ^ff0000100 Gold^000000";	
 next;	
-mes "^ff0000[Justin]^000000";	
+mes "^ff0000[Adrian]^000000";	
 mes "I'll be waiting for you chosen one!";	
 if(countitem(7345) < 300 || countitem(7086) < 9 || countitem(7035) < 10 || countitem(969) < 100) goto kikiki;
 if(countitem(7345) >= 300 || countitem(7086) >= 9 || countitem(7035) >= 10 || countitem(969) >= 100) goto killhim;
@@ -477,7 +477,7 @@ close;
 
 L_nono:		
 	
-mes "^ff0000[Justin]^000000";	
+mes "^ff0000[Adrian]^000000";	
 mes "Go away if you don't want it";
 mes "Just speak to me if you want it already";
 close;	
@@ -485,13 +485,13 @@ close;
 	
 kikiki:	
 next;	
-mes "^ff0000[Justin]^000000";	
+mes "^ff0000[Adrian]^000000";	
 mes "Incomplete supplies dude";	
 close;	
 
 killhim:	
 next;
-mes "^ff0000[Justin]^000000";	
+mes "^ff0000[Adrian]^000000";	
 mes "Very well done my friend";	
 mes "You are very good!!";	
 delitem 7345,300;	
@@ -501,7 +501,7 @@ delitem 969,100;
 getitem2 2410,1,1,@ref,0,254,0,getcharid(0)&0xffff,(getcharid(0)>>16)&0xffff;
 set dar_dar,1;
 next;	
-mes "^ff0000[Justin]^000000";	
+mes "^ff0000[Adrian]^000000";	
 mes "Success!!!! Enjoy the sleipnir";		
 mes "You are now a Mega-Warrior of Tsukiohana";
 mes "Go free now you noble man";
@@ -509,7 +509,7 @@ announce "Wews! "+strcharinfo(0)+" has just become the Mega-Warrior and gained S
 close;	
 	
 L_kalbo:	
-mes "^ff0000[Justin]^000000";	
+mes "^ff0000[Adrian]^000000";	
 mes "You have already gained sleipnir";		
 mes "How dare you speak to me again now i order you to go back to prontera!";
 next;
@@ -518,7 +518,7 @@ warp "prontera.gat",0,0;
 close;
 
 daryl:
-mes "^ff0000[Justin]^000000";	
+mes "^ff0000[Adrian]^000000";	
 mes "Oh, your just another newbie";	
 mes "Go fly away";	
 close;	

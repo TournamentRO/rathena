@@ -11895,6 +11895,48 @@ BUILDIN_FUNC(waitingroomkick)
 	return SCRIPT_CMD_SUCCESS;
 }
 
+/// createchatroom( <char|account|name>, <title>, <password>, {<limit>, <type>} );
+/// password : only enabled for type 0
+/// limit[ 1,20 ], 1 by default
+/// type : 1 -> public, 0 -> private
+BUILDIN_FUNC(createchatroom)
+{
+	int len = strlen(script_getstr(st, 3));
+	int limit = 1;
+	char title[CHATROOM_TITLE_SIZE];
+	char password[CHATROOM_PASS_SIZE];
+	bool type = 1;// chat public by default
+	TBL_PC *sd = NULL;
+
+	if (script_isstring(st, 2))
+		sd = map_nick2sd(script_getstr(st, 2),false);
+	else {
+		int id = script_getnum(st, 2);
+		sd = map_charid2sd(id) ? map_charid2sd(id) : map_id2sd(id);
+	}
+	if (sd == NULL) {
+		ShowWarning("createchatroom : none player attached.\n");
+		return 0;
+	}
+	if ((sd->sc.data[SC_NOCHAT] && sd->sc.data[SC_NOCHAT]->val1&MANNER_NOROOM) || (battle_config.basic_skill_check && pc_checkskill(sd, NV_BASIC) < 4) || npc_isnear(&sd->bl)) return 0;
+	if (len > CHATROOM_TITLE_SIZE || strlen(script_getstr(st, 4)) > CHATROOM_PASS_SIZE) return 0;
+	if (sd->chatID != 0) return 0;
+
+	safestrncpy(title, script_getstr(st, 3), min(len + 1, CHATROOM_TITLE_SIZE));
+	safestrncpy(password, script_getstr(st, 4), CHATROOM_PASS_SIZE);
+
+	if (script_hasdata(st, 5)) {
+		int tmp = script_getnum(st, 5);
+		if (tmp > limit && tmp <= 20) limit = tmp;
+		else if (tmp > 20) limit = 20;
+	}
+	if (script_hasdata(st, 6) && script_getnum(st, 6) == 0) type = 0;
+
+	chat_createpcchat(sd, title, password, limit, type);
+	chat_changechatstatus(sd, title, password, limit, type);
+	return 0;
+}
+
 /// Get Users in waiting room and stores gids in .@waitingroom_users[]
 /// Num users stored in .@waitingroom_usercount
 ///
@@ -23962,6 +24004,7 @@ struct script_function buildin_func[] = {
 	BUILDIN_DEF(changesex,"?"),
 	BUILDIN_DEF(changecharsex,"?"),
 	BUILDIN_DEF(waitingroom,"si?????"),
+	BUILDIN_DEF(createchatroom, "vss??"),
 	BUILDIN_DEF(delwaitingroom,"?"),
 	BUILDIN_DEF(waitingroomkick,"ss"),
 	BUILDIN_DEF(getwaitingroomusers, "?"),
